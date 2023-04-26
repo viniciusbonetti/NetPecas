@@ -1,0 +1,32 @@
+<c-alert color="secondary">Selected: {{selectedItems}}</c-alert>
+
+<c-smart-table
+  [columnSorter]="true"
+  [columns]="columns"
+  [itemsPerPageSelect]="true"
+  [itemsPerPage]="5"
+  [items]="usersData"
+  [tableBodyProps]="{ align: 'middle' }"
+  [tableProps]="{ hover: true, striped: true, responsive: true }"
+  (selectedItemsChange)="checkSelected($event)"
+  clickableRows
+  header
+  pagination
+  selectable
+>
+  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+    <td>
+      <ng-container [ngSwitch]="columnName">
+        <ng-container *ngSwitchCase="'status'">
+          <c-badge [color]="getBadge(tdContent)">
+            {{(item[columnName])}}
+          </c-badge>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          {{tdContent}}
+        </ng-container>
+      </ng-container>
+    </td>
+  </ng-template>
+</c-smart-table>
+

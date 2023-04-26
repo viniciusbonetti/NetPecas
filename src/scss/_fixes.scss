@@ -1,0 +1,33 @@
+// Place for temp fixes
+
+// temp fix for scrollbar styling (wip)
+@import "scrollbar";
+
+// temp fix .chartjs-tooltip-body-item padding
+@import "charts";
+
+// temp fix for dark-theme select options
+.dark-theme select > option {
+  background-color: var(--cui-body-bg, #282933);
+}
+
+// temp fix for dark-theme .picker.show .input-group
+.dark-theme .picker.show .input-group {
+  background-color: var(--cui-input-bg, #282933);
+}
+
+// temp fix for dark-theme .form-control:disabled
+.dark-theme .form-control:disabled {
+  background-color: var(--cui-input-bg, #282933);
+}
+
+// temp fix for .form-floating .form-delect
+html:not([dir=rtl]) .form-floating > .form-select {
+  padding-top: 1.625rem;
+  padding-bottom: 0.625rem;
+}
+
+// temp fix for dark-theme .form-multi-select-optgroup-label color
+.dark-theme .form-multi-select-optgroup-label {
+  color: var(--cui-form-multi-select-disabled-color);
+}

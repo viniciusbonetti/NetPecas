@@ -1,0 +1,477 @@
+<!--<c-header class="mb-4 d-print-none" position="sticky">-->
+<ng-container>
+  <c-container [fluid]="true">
+    <button
+      toggle="visible"
+      cHeaderToggler
+      [cSidebarToggle]="sidebarId"
+      class="ps-1"
+    >
+      <svg cIcon
+        name="cilMenu"
+        size="lg"
+      ></svg>
+    </button>
+    <c-header-nav class="d-none d-lg-flex me-auto">
+      <c-nav-item>
+        <a cNavLink routerLink="/dashboard" routerLinkActive="active">
+          Dashboard
+        </a>
+      </c-nav-item>
+      <c-nav-item>
+        <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
+      </c-nav-item>
+      <c-nav-item>
+        <a cNavLink routerLink="/settings" routerLinkActive="active">
+          Settings
+        </a>
+      </c-nav-item>
+    </c-header-nav>
+
+    <c-header-nav class="ms-auto me-4">
+      <form [formGroup]="themeSwitch" cForm>
+        <c-button-group aria-label="Theme switch">
+          <input
+            class="btn-check"
+            formControlName="themeSwitchRadio"
+            id="btn-light-theme"
+            type="radio"
+            value="light"
+          />
+          <label
+            (click)="setTheme('light')"
+            cButton
+            cFormCheckLabel
+            color="primary"
+          >
+            <svg cIcon name="cilSun"></svg>
+          </label>
+          <input
+            class="btn-check"
+            formControlName="themeSwitchRadio"
+            id="btn-dark-theme"
+            type="radio"
+            value="dark"
+          />
+          <label
+            (click)="setTheme('dark')"
+            cButton
+            cFormCheckLabel
+            color="primary"
+          >
+            <svg cIcon name="cilMoon"></svg>
+          </label>
+        </c-button-group>
+      </form>
+    </c-header-nav>
+
+    <!-- todo: header nav dropdown menus  -->
+    <c-header-nav class="d-none d-lg-flex">
+      <ng-container *ngTemplateOutlet="notifyDropdown"></ng-container>
+      <ng-container *ngTemplateOutlet="taskDropdown"></ng-container>
+      <ng-container *ngTemplateOutlet="messagesDropdown"></ng-container>
+    </c-header-nav>
+    <c-header-nav class="ms-3 me-sm-4">
+      <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
+    </c-header-nav>
+
+    <!--aside toggler-->
+    <button
+      toggle="visible"
+      cHeaderToggler
+      cSidebarToggle="aside1"
+      class="px-md-0 me-md-3 d-none d-sm-block"
+    >
+      <svg cIcon name="cilApplicationsSettings" size="lg"></svg>
+    </button>
+  </c-container>
+  <c-header-divider></c-header-divider>
+  <c-container [fluid]="true">
+    <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
+  </c-container>
+</ng-container>
+<!--</c-header>-->
+
+<ng-template #userDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <a href
+      [caret]="false"
+      cDropdownToggle
+      class="py-0"
+    >
+      <c-avatar
+        cTextColor="primary"
+        shape="rounded-1"
+        size="md"
+        src="./assets/img/avatars/8.jpg"
+        status="success"
+      >
+      </c-avatar>
+    </a>
+    <ul cDropdownMenu class="pt-0 pr-5 w-auto">
+      <li>
+        <h6 cDropdownHeader class="bg-light dark:bg-white dark:bg-opacity-10 fw-semibold py-2">Account</h6>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilBell"></svg>
+          Updates
+          <c-badge class="ms-2 float-end" color="info-gradient">
+            42
+          </c-badge>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/apps/email/inbox" cDropdownItem>
+          <svg cIcon class="me-2" name="cilEnvelopeOpen"></svg>
+          Messages
+          <c-badge class="ms-2 float-end" color="success-gradient">
+            42
+          </c-badge>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilTask"></svg>
+          Tasks
+          <c-badge class="ms-2 float-end" color="danger-gradient">
+            42
+          </c-badge>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name='cilCommentSquare'></svg>
+          Comments
+          <c-badge class="ms-auto" color="warning-gradient">
+            42
+          </c-badge>
+        </a>
+      </li>
+      <li>
+        <h6 cDropdownHeader class="bg-light dark:bg-white dark:bg-opacity-10 fw-semibold py-2">Settings</h6>
+      </li>
+      <li></li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilUser"></svg>
+          Profile
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilSettings"></svg>
+          Settings
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilCreditCard"></svg>
+          Payments
+          <c-badge class="ms-2 float-end" color="secondary-gradient">
+            42
+          </c-badge>
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilFile"></svg>
+          Projects
+          <c-badge class="ms-2 float-end" color="primary-gradient">
+            42
+          </c-badge>
+        </a>
+      </li>
+      <li>
+        <hr cDropdownDivider/>
+      </li>
+      <li>
+        <a [routerLink]="[]" cDropdownItem>
+          <svg cIcon class="me-2" name="cilLockLocked"></svg>
+          Lock Account
+        </a>
+      </li>
+      <li></li>
+    </ul>
+  </c-dropdown>
+</ng-template>
+
+<ng-template #messagesDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <a [caret]="false" cDropdownToggle href>
+      <svg cIcon class="my-1 mx-2" name="cilEnvelopeOpen" size="lg"></svg>
+      <c-badge
+        *ngIf="newMessages?.length"
+        class="position-absolute top-0 end-0"
+        color="info-gradient"
+        shape="rounded-pill"
+      >
+        {{ newMessages?.length ?? 0 }}
+      </c-badge>
+    </a>
+    <div cDropdownMenu class="pt-0">
+      <h6 cDropdownHeader class="bg-light dark:bg-white dark:bg-opacity-10">
+        <strong>You have {{ newMessages?.length ?? 0 }} messages</strong>
+      </h6>
+      <a [routerLink]="[]" cDropdownItem>
+        <div class="message">
+          <div class="pt-3 me-3 float-start">
+            <c-avatar
+              src="./assets/img/avatars/7.jpg"
+              status="success"
+            ></c-avatar>
+          </div>
+          <div>
+            <small class="text-medium-emphasis">John Doe</small>
+            <small class="text-medium-emphasis float-end mt-1">Just now</small>
+          </div>
+          <div class="text-truncate font-weight-bold">
+            <span class="fa fa-exclamation text-danger"></span> Important
+            message
+          </div>
+          <div class="small text-medium-emphasis text-truncate">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt...
+          </div>
+        </div>
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <div class="message">
+          <div class="pt-3 me-3 float-start">
+            <c-avatar
+              src="./assets/img/avatars/6.jpg"
+              status="warning"
+            ></c-avatar>
+          </div>
+          <div>
+            <small class="text-medium-emphasis">Jane Dovve</small>
+            <small class="text-medium-emphasis float-end mt-1"
+            >5 minutes ago</small
+            >
+          </div>
+          <div class="text-truncate font-weight-bold">
+            Lorem ipsum dolor sit amet
+          </div>
+          <div class="small text-medium-emphasis text-truncate">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt...
+          </div>
+        </div>
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <div class="message">
+          <div class="pt-3 me-3 float-start">
+            <c-avatar
+              src="./assets/img/avatars/5.jpg"
+              status="danger"
+            ></c-avatar>
+          </div>
+          <div>
+            <small class="text-medium-emphasis">Janet Doe</small>
+            <small class="text-medium-emphasis float-end mt-1">1:52 PM</small>
+          </div>
+          <div class="text-truncate font-weight-bold">
+            Lorem ipsum dolor sit amet
+          </div>
+          <div class="small text-medium-emphasis text-truncate">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt...
+          </div>
+        </div>
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <div class="message">
+          <div class="pt-3 me-3 float-start">
+            <c-avatar src="./assets/img/avatars/4.jpg" status="info"></c-avatar>
+          </div>
+          <div>
+            <small class="text-medium-emphasis">Joe Doe</small>
+            <small class="text-medium-emphasis float-end mt-1">4:03 AM</small>
+          </div>
+          <div class="text-truncate font-weight-bold">
+            Lorem ipsum dolor sit amet
+          </div>
+          <div class="small text-medium-emphasis text-truncate">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt...
+          </div>
+        </div>
+      </a>
+      <a
+        cDropdownItem
+        class="text-center border-top"
+        routerLink="apps/email/inbox"
+      >
+        <strong>View all messages</strong>
+      </a>
+    </div>
+  </c-dropdown>
+</ng-template>
+
+<ng-template #notifyDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <a [caret]="false" cDropdownToggle href>
+      <svg cIcon class="my-1 mx-2" name="cilBell" size="lg"></svg>
+      <c-badge
+        *ngIf="newNotifications?.length"
+        class="position-absolute top-0 end-0"
+        color="danger-gradient"
+        shape="rounded-pill"
+      >
+        {{ newNotifications?.length ?? 0 }}
+      </c-badge>
+    </a>
+    <div cDropdownMenu class="pt-0">
+      <h6 cDropdownHeader class="bg-light dark:bg-white dark:bg-opacity-10">
+        <strong
+        >You have {{ newNotifications?.length ?? 0 }} notifications</strong
+        >
+      </h6>
+      <a [routerLink]="[]" cDropdownItem>
+        <svg cIcon class="me-2 text-success" name="cilUserFollow"></svg>
+        New user registered
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <svg cIcon class="me-2 text-danger" name="cilUserUnfollow"></svg>
+        User deleted
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <svg cIcon class="me-2 text-info" name="cilChartPie"></svg>
+        Sales report is ready
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <svg cIcon class="me-2 text-primary" name="cilBasket"></svg>
+        New client
+      </a>
+      <a [routerLink]="[]" cDropdownItem>
+        <svg cIcon class="me-2 text-warning" name="cilSpeedometer"></svg>
+        Server overloaded
+      </a>
+      <h6 cDropdownHeader class="bg-light dark:bg-white dark:bg-opacity-10">
+        <strong>Server</strong>
+      </h6>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="text-uppercase mb-1">
+          <small>
+            <b>CPU Usage</b>
+          </small>
+        </div>
+        <c-progress thin>
+          <c-progress-bar [value]="25" color="info-gradient"></c-progress-bar>
+        </c-progress>
+        <small class="text-medium-emphasis">348 Processes. 1/4 Cores.</small>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="text-uppercase mb-1">
+          <small>
+            <b>Memory Usage</b>
+          </small>
+        </div>
+        <c-progress thin>
+          <c-progress-bar
+            [value]="70"
+            color="warning-gradient"
+          ></c-progress-bar>
+        </c-progress>
+        <small class="text-medium-emphasis">11444GB/16384MB</small>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="text-uppercase mb-1">
+          <small>
+            <b>SSD 1 Usage</b>
+          </small>
+        </div>
+        <c-progress thin>
+          <c-progress-bar [value]="90" color="danger-gradient"></c-progress-bar>
+        </c-progress>
+        <small class="text-medium-emphasis">243GB/256GB</small>
+      </a>
+    </div>
+  </c-dropdown>
+</ng-template>
+
+<ng-template #taskDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <a [caret]="false" cDropdownToggle href>
+      <svg cIcon class="my-1 mx-2" name="cilList" size="lg"></svg>
+      <c-badge
+        *ngIf="newTasks?.length"
+        class="position-absolute top-0 end-0"
+        color="warning-gradient"
+        shape="rounded-pill"
+      >
+        {{ newTasks.length ?? 0 }}
+      </c-badge>
+    </a>
+    <div cDropdownMenu class="pt-0">
+      <h6 cDropdownHeader class="bg-light dark:bg-white dark:bg-opacity-10">
+        <strong>You have {{ newTasks.length ?? 0 }} pending tasks</strong>
+      </h6>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="small mb-1">
+          Upgrade NPM &amp; Bower
+          <span class="float-end">
+            <strong>0%</strong>
+          </span>
+        </div>
+        <c-progress thin>
+          <c-progress-bar [value]="0" color="info-gradient"></c-progress-bar>
+        </c-progress>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="small mb-1">
+          ReactJS Version
+          <span class="float-end">
+            <strong>25%</strong>
+          </span>
+        </div>
+        <c-progress thin>
+          <c-progress-bar [value]="25" color="danger-gradient"></c-progress-bar>
+        </c-progress>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="small mb-1">
+          VueJS Version
+          <span class="float-end">
+            <strong>50%</strong>
+          </span>
+        </div>
+        <c-progress thin>
+          <c-progress-bar
+            [value]="50"
+            color="warning-gradient"
+          ></c-progress-bar>
+        </c-progress>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="small mb-1">
+          Add new layouts
+          <span class="float-end">
+            <strong>75%</strong>
+          </span>
+        </div>
+        <c-progress thin>
+          <c-progress-bar [value]="75" color="info-gradient"></c-progress-bar>
+        </c-progress>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-block">
+        <div class="small mb-1">
+          Angular 2 Cli Version
+          <span class="float-end">
+            <strong>100%</strong>
+          </span>
+        </div>
+        <c-progress thin>
+          <c-progress-bar
+            [value]="100"
+            color="success-gradient"
+          ></c-progress-bar>
+        </c-progress>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="text-center border-top">
+        <strong>View all tasks</strong>
+      </a>
+    </div>
+  </c-dropdown>
+</ng-template>
+

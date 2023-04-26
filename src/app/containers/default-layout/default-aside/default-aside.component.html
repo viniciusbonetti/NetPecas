@@ -1,0 +1,333 @@
+<c-sidebar
+  #aside1="cSidebar"
+  class="d-print-none hide"
+  colorScheme="light"
+  id="aside1"
+  overlaid
+  placement="end"
+  size="lg"
+>
+  <!--nav for tabs-->
+  <c-sidebar-header class="bg-transparent p-0">
+    <c-nav variant="underline">
+      <c-nav-item>
+        <a
+          [active]="true"
+          [cTabContent]="asideTabContent"
+          [tabPaneIdx]="0"
+          cNavLink
+          [routerLink]="[]"
+        >
+          <svg alt="CoreUI Icons List" cIcon name="cilList"></svg>
+        </a>
+      </c-nav-item>
+      <c-nav-item>
+        <a
+          [cTabContent]="asideTabContent"
+          [tabPaneIdx]="1"
+          cNavLink
+          [routerLink]="[]"
+        >
+          <svg alt="CoreUI Icons Speech"
+               cIcon
+               name="cilSpeech"
+          ></svg>
+        </a>
+      </c-nav-item>
+      <c-nav-item>
+        <a
+          [cTabContent]="asideTabContent"
+          [tabPaneIdx]="2"
+          cNavLink
+          [routerLink]="[]"
+        >
+          <svg alt="CoreUI Icons Settings" cIcon name="cilSettings"></svg>
+        </a>
+      </c-nav-item>
+      <c-nav-item class="ms-auto me-2 d-flex align-items-center">
+        <!--aside toggler-->
+        <button
+          cButtonClose
+          cSidebarToggle="aside1"
+          class="me-2"
+          toggle="visible"
+        ></button>
+      </c-nav-item>
+    </c-nav>
+  </c-sidebar-header>
+
+  <!--tab content-->
+  <c-tab-content #asideTabContent="cTabContent">
+    <c-tab-pane role="tabpanel" style="transition: opacity 150ms linear 0s">
+      <ng-container *ngTemplateOutlet="tabPane1"></ng-container>
+    </c-tab-pane>
+    <c-tab-pane
+      class="p-3"
+      role="tabpanel"
+      style="transition: opacity 150ms linear 0s"
+    >
+      <ng-container *ngTemplateOutlet="tabPane2"></ng-container>
+    </c-tab-pane>
+    <c-tab-pane
+      class="p-3"
+      role="tabpanel"
+      style="transition: opacity 150ms linear 0s"
+    >
+      <ng-container *ngTemplateOutlet="tabPane3"></ng-container>
+    </c-tab-pane>
+  </c-tab-content>
+</c-sidebar>
+
+<!--tab pane templates-->
+<ng-template #tabPane1>
+  <div [flush]="true" cListGroup>
+    <a
+      [cBorder]="{ start: { color: 'secondary', width: 4 } }"
+      cListGroupItem
+      class="
+            bg-light
+            text-center
+            fw-bold
+            text-medium-emphasis text-uppercase
+            small
+            dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis
+          "
+    >
+      Today
+    </a>
+    <a
+      [cBorder]="{ start: { color: 'warning', width: 4 } }"
+      [routerLink]="[]"
+      cListGroupItem
+    >
+      <c-avatar
+        class="float-end"
+        size="lg"
+        src="./assets/img/avatars/7.jpg"
+      ></c-avatar>
+      <div>Meeting with <strong>Lucas</strong></div>
+      <small class="text-medium-emphasis me-3">
+        <svg cIcon name="cilCalendar"></svg>
+        1 - 3pm
+      </small>
+      <small class="text-medium-emphasis">
+        <svg cIcon name="cilLocationPin"></svg>
+        Palo Alto, CA
+      </small>
+    </a>
+    <a
+      [cBorder]="{ start: { color: 'info', width: 4 } }"
+      [routerLink]="[]"
+      cListGroupItem
+    >
+      <c-avatar
+        class="float-end"
+        size="lg"
+        src="./assets/img/avatars/4.jpg"
+      ></c-avatar>
+      <div>Skype with <strong>Megan</strong></div>
+      <small class="text-medium-emphasis me-3">
+        <svg cIcon name="cilCalendar"></svg>
+        4 - 5pm
+      </small>
+      <small class="text-medium-emphasis">
+        <svg cIcon name="cibSkype"></svg>
+        On-line
+      </small>
+    </a>
+    <a
+      [cBorder]="{ start: { color: 'secondary', width: 4 } }"
+      cListGroupItem
+      class="
+            bg-light
+            text-center
+            fw-bold
+            text-medium-emphasis text-uppercase
+            small
+            dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis
+          "
+    >
+      Tomorrow
+    </a>
+    <a
+      [cBorder]="{ start: { color: 'danger', width: 4 } }"
+      [routerLink]="[]"
+      cListGroupItem
+    >
+      <div>New UI Project - <strong>deadline</strong></div>
+      <small class="text-medium-emphasis me-3">
+        <svg cIcon name="cilCalendar"></svg>
+        10 - 11pm
+      </small>
+      <small class="text-medium-emphasis">
+        <svg cIcon name="cilHome"></svg>
+        creativeLabs HQ
+      </small>
+      <div class="avatars-stack mt-2">
+        <c-avatar size="sm" src="./assets/img/avatars/2.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/3.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/4.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/5.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/6.jpg"></c-avatar>
+      </div>
+    </a>
+    <a
+      [cBorder]="{ start: { color: 'success', width: 4 } }"
+      [routerLink]="[]"
+      cListGroupItem
+    >
+      <div><strong>#10 Startups.Garden</strong> Meetup</div>
+      <small class="text-medium-emphasis me-3">
+        <svg cIcon name="cilCalendar"></svg>
+        1 - 3pm
+      </small>
+      <small class="text-medium-emphasis">
+        <svg cIcon name="cilLocationPin"></svg>
+        Palo Alto, CA
+      </small>
+    </a>
+    <a
+      [cBorder]="{ start: { color: 'primary', width: 4 }, bottom: true }"
+      [routerLink]="[]"
+      cListGroupItem
+    >
+      <div>
+        <strong>Team meeting</strong>
+      </div>
+      <small class="text-medium-emphasis me-3">
+        <svg cIcon name="cilCalendar"></svg>
+        4 - 6pm
+      </small>
+      <small class="text-medium-emphasis">
+        <svg cIcon name="cilHome"></svg>
+        creativeLabs HQ
+      </small>
+      <div class="avatars-stack mt-2">
+        <c-avatar size="sm" src="./assets/img/avatars/2.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/3.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/4.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/5.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/6.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/7.jpg"></c-avatar>
+        <c-avatar size="sm" src="./assets/img/avatars/8.jpg"></c-avatar>
+      </div>
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #tabPane2>
+  <div [flush]="true" cListGroup>
+    <a
+      *ngFor="let message of messages; index as i; last as isLast"
+      [cBorder]="{ bottom: !isLast }"
+      [routerLink]="'/apps/email/message'"
+      cListGroupItem
+      class="message"
+    >
+      <div class="py-3 pb-5 me-3 float-start">
+        <c-avatar
+          size="md"
+          src="./assets/img/avatars/{{ i + 1 }}.jpg"
+          status="success"
+        ></c-avatar>
+      </div>
+      <div>
+        <small class="text-medium-emphasis">Lukasz Holeczek</small>
+        <small class="text-medium-emphasis float-end mt-1">1:52 PM</small>
+      </div>
+      <div class="text-truncate fw-semibold">
+        Lorem ipsum dolor sit amet
+      </div>
+      <small class="text-medium-emphasis">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+        eiusmod tempor incididunt...
+      </small>
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #tabPane3>
+  <h6>Settings</h6>
+  <div>
+    <div class="clearfix mt-4">
+      <c-form-check [switch]="true" sizing="lg">
+        <input cFormCheckInput checked id="Option1" type="checkbox" />
+        <label cFormCheckLabel>Option 1</label>
+      </c-form-check>
+    </div>
+    <div>
+      <small class="text-medium-emphasis">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      </small>
+    </div>
+  </div>
+  <div>
+    <div class="clearfix mt-3">
+      <c-form-check [switch]="true" sizing="lg">
+        <input cFormCheckInput id="Option2" type="checkbox" />
+        <label cFormCheckLabel>Option 2</label>
+      </c-form-check>
+    </div>
+    <div>
+      <small class="text-medium-emphasis">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      </small>
+    </div>
+  </div>
+  <div>
+    <div class="clearfix mt-3">
+      <c-form-check [switch]="true" sizing="lg">
+        <input cFormCheckInput id="Option3" type="checkbox" />
+        <label cFormCheckLabel>Option 3</label>
+      </c-form-check>
+    </div>
+  </div>
+  <div>
+    <div class="clearfix mt-3">
+      <c-form-check [switch]="true" sizing="lg">
+        <input cFormCheckInput checked id="Option4" type="checkbox" />
+        <label cFormCheckLabel>Option 4</label>
+      </c-form-check>
+    </div>
+  </div>
+  <hr />
+  <h6>System Utilization</h6>
+  <div class="text-uppercase mb-1 mt-4">
+    <small>
+      <b>CPU Usage</b>
+    </small>
+  </div>
+  <c-progress thin>
+    <c-progress-bar [value]="25" color="info-gradient"></c-progress-bar>
+  </c-progress>
+  <small class="text-medium-emphasis">348 Processes. 1/4 Cores.</small>
+  <div class="text-uppercase mb-1 mt-2">
+    <small>
+      <b>Memory Usage</b>
+    </small>
+  </div>
+  <c-progress thin>
+    <c-progress-bar [value]="70" color="warning-gradient"></c-progress-bar>
+  </c-progress>
+  <small class="text-medium-emphasis">11444GB/16384MB</small>
+  <div class="text-uppercase mb-1 mt-2">
+    <small>
+      <b>SSD 1 Usage</b>
+    </small>
+  </div>
+  <c-progress thin>
+    <c-progress-bar [value]="95" color="danger-gradient"></c-progress-bar>
+  </c-progress>
+  <small class="text-medium-emphasis">243GB/256GB</small>
+  <div class="text-uppercase mb-1 mt-2">
+    <small>
+      <b>SSD 2 Usage</b>
+    </small>
+  </div>
+  <c-progress thin>
+    <c-progress-bar [value]="10" color="success-gradient"></c-progress-bar>
+  </c-progress>
+  <small class="text-medium-emphasis">25GB/256GB</small>
+</ng-template>

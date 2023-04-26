@@ -1,0 +1,28 @@
+<div class="fade-in">
+  <c-card>
+    <c-card-header>
+      Angular Google Maps
+      <app-docs-link href="https://github.com/angular/components/tree/master/src/google-maps"></app-docs-link>
+    </c-card-header>
+    <c-card-body>
+      <div *ngIf="googleMapsLoaderService.apiLoaded | async">
+        <!-- this creates a google map on the page with the given lat/lng from -->
+        <!-- the component as the initial center of the map: -->
+        <google-map [height]="'360px'" [options]="options" [width]="'100%'">
+          <map-marker #marker="mapMarker"
+                      (mapClick)="openInfoWindow(marker, m)"
+                      *ngFor="let m of markers; let i = index"
+                      [label]="m.label"
+                      [options]="markerOptions"
+                      [position]="m.position"
+                      [title]="m.title">
+          </map-marker>
+          <map-info-window>
+            <a class="px-2" href="{{activeInfoWindow?.www}}"
+               target="_blank"><strong>{{activeInfoWindow?.title}}</strong></a>
+          </map-info-window>
+        </google-map>
+      </div>
+    </c-card-body>
+  </c-card>
+</div>
