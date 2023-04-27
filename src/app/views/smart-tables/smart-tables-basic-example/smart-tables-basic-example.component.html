@@ -38,9 +38,15 @@
             {{(item[columnName])}}
           </c-badge>
         </ng-container>
-        <ng-container *ngSwitchCase="'show'" class="py-2">
+        <ng-container *ngSwitchCase="'mostrar'" class="py-2">
           <button (click)="toggleDetails(item._id)" cButton color="primary" size="sm" variant="outline">
-            Show
+            mostrar
+          </button>
+          <button (click)="toggleDetails(item._id)" cButton color="primary" size="sm" variant="outline">
+            editar
+          </button>
+          <button (click)="toggleDetails(item._id)" cButton color="primary" size="sm" variant="outline">
+            excluir
           </button>
         </ng-container>
         <ng-container *ngSwitchDefault>

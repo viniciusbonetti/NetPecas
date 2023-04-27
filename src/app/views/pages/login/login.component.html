@@ -1,61 +1,213 @@
 <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
-  <c-container breakpoint="md">
-    <c-row class="justify-content-center">
-      <c-col lg="10" xl="8">
-        <c-card-group>
-          <c-card class="p-4">
-            <c-card-body>
-              <form cForm>
-                <h1>Login</h1>
-                <p class="text-medium-emphasis">Sign In to your account</p>
-                <c-input-group class="mb-3">
-                  <span cInputGroupText>
-                    <svg cIcon name="cilUser"></svg>
-                  </span>
-                  <input autoComplete="username" cFormControl placeholder="Username" />
-                </c-input-group>
-                <c-input-group class="mb-4">
-                  <span cInputGroupText>
-                    <svg cIcon name="cilLockLocked"></svg>
-                  </span>
-                  <input
-                    autoComplete="current-password"
-                    cFormControl
-                    placeholder="Password"
-                    type="password"
-                  />
-                </c-input-group>
-                <c-row>
-                  <c-col xs="6">
-                    <button cButton class="px-4" color="primary">
-                      Login
-                    </button>
-                  </c-col>
-                  <c-col class="text-right" xs="6">
-                    <button cButton class="px-0" color="link">
-                      Forgot password?
-                    </button>
-                  </c-col>
-                </c-row>
-              </form>
-            </c-card-body>
-          </c-card>
-          <c-card [ngStyle]="{'minWidth.%': 44}" class="text-white bg-primary py-5">
-            <c-card-body class="text-center">
-              <div>
-                <h2>Sign up</h2>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                  tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-                <button [active]="true" cButton class="mt-3" color="primary" routerLink="/register">
-                  Register Now!
-                </button>
-              </div>
-            </c-card-body>
-          </c-card>
-        </c-card-group>
-      </c-col>
-    </c-row>
+  <c-container>
+      <c-row class="justify-content-center">
+          <c-col md="8">
+              <c-card-group>
+                  <c-card class="p-4">
+                      <c-card-body>
+                          <!-- Formulario Login -->
+                          <form [formGroup]="formLogin" (ngSubmit)="sendLogin()" novalidate cForm>
+                              <h1>Login</h1>
+                              <p class="text-medium-emphasis">Conectar-se ao NetPeças</p>
+                              <c-input-group class="mb-3">
+                                  <span cInputGroupText>
+                                      <svg cIcon name="cilUser"></svg>
+                                  </span>
+                                  <input autoComplete="username" cFormControl placeholder="Usuario" formControlName="nome_usuario" [valid]="manualValidation" required />
+                                  <c-form-feedback [valid]="false">Usuário é obrigatório!</c-form-feedback>
+                              </c-input-group>
+                              <c-input-group class="mb-4">
+                                  <span cInputGroupText>
+                                      <svg cIcon name="cilLockLocked"></svg>
+                                  </span>
+                                  <input autoComplete="current-password" cFormControl placeholder="Senha" formControlName="senha_usuario" type="password" [valid]="manualValidation" required />
+                                  <c-form-feedback [valid]="false">Senha é obrigatória!</c-form-feedback>
+                              </c-input-group>
+                              <c-row>
+                                  <c-col xs="6">
+                                      <button cButton class="px-4" color="primary" type="submit">Entrar</button>
+                                  </c-col>
+                              </c-row>
+                          </form>
+
+                          <!-- Modal Recuperar Senha -->
+                          <c-col class="text-center p-3" xs="12">
+                              <button [cModalToggle]="modalRecuperarSenha.id" cButton class="px-0" color="link">Esqueceu sua senha?</button>
+
+                              <c-modal #modalRecuperarSenha id="modalRecuperarSenha" alignment="center" (visibleChange)="fechou()">
+                                  <c-modal-header *ngIf="!recuperouSenha">
+                                      <h5 cModalTitle>Informe o e-mail e usuário para recuperar a sua senha.</h5>
+                                      <button (click)="fechou()" [cModalToggle]="modalRecuperarSenha.id" cButtonClose></button>
+                                  </c-modal-header>
+                                  <c-modal-header *ngIf="recuperouSenha">
+                                      <h1 cModalTitle>Sucesso!</h1>
+                                      <button (click)="fechou()" [cModalToggle]="modalRecuperarSenha.id" cButtonClose></button>
+                                  </c-modal-header>
+
+                                  <c-modal-body *ngIf="!recuperouSenha">
+                                      <form [formGroup]="formRecuperarSenha">
+                                          <c-input-group class="input-group mb-3">
+                                              <span class="input-group-text col-2" id="label-nome_usuario">Usuário</span>
+                                              <input id="nome_usuario" name="nome_usuario" type="text" aria-label="Usuario" cFormControl formControlName="nome_usuario" noValidate [valid]="recuperouSenha" />
+                                          </c-input-group>
+                                          <c-input-group md="12">
+                                              <span class="input-group-text col-2" id="label-usuario_email">E-mail</span>
+                                              <input id="email_usuario" name="email_usuario" type="email" aria-label="Email" cFormControl formControlName="email_usuario" [valid]="recuperouSenha" />
+                                          </c-input-group>
+                                      </form>
+                                  </c-modal-body>
+
+                                  <c-modal-body *ngIf="recuperouSenha">
+                                      <i class="fa-light fa-clipboard-check fa-bounce fa-2x text-success" style="--fa-bounce-rebound: 1; --fa-animation-iteration-count: 2"></i>
+                                      <p>Um email foi enviado com a sua senha!</p>
+                                  </c-modal-body>
+
+                                  <c-modal-footer>
+                                      <button (click)="fechou()" [cModalToggle]="modalRecuperarSenha.id" cButton color="secondary">Fechar</button>
+                                      <button (click)="recuperarSenha()" cButton color="primary" *ngIf="!recuperouSenha">Enviar</button>
+                                  </c-modal-footer>
+                              </c-modal>
+                          </c-col>
+
+                          <!-- Modal Solicitar Acesso -->
+                          <c-col class="text-center" xs="12">
+                              <p class="p-0 row justify-content-center">
+                                  Ainda não é cadastrado?
+                                  <button [cModalToggle]="modalSolicitarAcesso.id" cButton class="p-0" color="link" style="text-decoration: none">Solicite seu acesso!</button>
+                              </p>
+
+                              <c-modal #modalSolicitarAcesso id="modalSolicitarAcesso" alignment="center" size="lg" (visibleChange)="fechou()">
+                                  <c-modal-header *ngIf="!solicitouAcesso">
+                                      <h5 cModalTitle *ngIf="!consultou">Insira o CNPJ do responsável e clique em consultar para soliciar o acesso ao NetPeças.</h5>
+                                      <h5 cModalTitle *ngIf="consultou">Preencha com os dados do responsável para soliciar o acesso ao NetPeças.</h5>
+                                      <button (click)="fechou()" [cModalToggle]="modalSolicitarAcesso.id" cButtonClose></button>
+                                  </c-modal-header>
+                                  <c-modal-header *ngIf="solicitouAcesso">
+                                      <h1 cModalTitle>Sucesso!.</h1>
+                                      <button (click)="fechou()" [cModalToggle]="modalSolicitarAcesso.id" cButtonClose></button>
+                                  </c-modal-header>
+
+                                  <c-modal-body *ngIf="!solicitouAcesso">
+                                      <h3 class="text-start">Informações da loja</h3>
+                                      <!-- Info Loja -->
+                                      <c-input-group class="p-1">
+                                          <span class="input-group-text col-2" id="label-cnpj">CNPJ</span>
+                                          <input id="cnpj" name="cnpj" type="text" aria-label="CNPJ" cFormControl [(ngModel)]="inputCnpj" />
+                                          <button (click)="consultarCnpj()" cButton color="primary">Consultar</button>
+                                      </c-input-group>
+
+                                      <div *ngIf="consultou">
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-razao_social">Razão social</span>
+                                              <input id="razao_social" name="razao_social" type="text" aria-label="Razão social" cFormControl disabled [(ngModel)]="inputRazaoSocial" />
+                                          </c-input-group>
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-cidade">Cidade</span>
+                                              <input id="cidade" name="cidade" type="text" aria-label="Cidade" value="algo escrito" cFormControl disabled [(ngModel)]="inputCidade" />
+                                          </c-input-group>
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-uf">Estado/UF</span>
+                                              <input id="uf" name="uf" type="text" aria-label="Estado/UF" cFormControl disabled [(ngModel)]="inputEstado" />
+                                          </c-input-group>
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-qtde_lojas">Número de lojas</span>
+                                              <input id="qtde_lojas" name="qtde_lojas" type="text" aria-label="Número de lojas" cFormControl [(ngModel)]="inputNumeroLojas" />
+                                          </c-input-group>
+                                      </div>
+
+                                      <!-- Info Contato -->
+                                      <div *ngIf="consultou">
+                                          <h3 class="text-start mt-3">Informações de contato</h3>
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-nome_responsavel">Nome</span>
+                                              <input id="nome_responsavel" name="nome_responsavel" type="text" aria-label="Nome" cFormControl [(ngModel)]="inputNome" />
+                                          </c-input-group>
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-telefone_contato">Telefone</span>
+                                              <input id="telefone_contato" name="telefone_contato" type="text" aria-label="Telefone" cFormControl [(ngModel)]="inputTelefone" />
+                                          </c-input-group>
+                                          <c-input-group class="p-1">
+                                              <span class="input-group-text col-2" id="label-email_responsavel">E-mail</span>
+                                              <input id="email_responsavel" name="email_responsavel" type="email" aria-label="Email" cFormControl [(ngModel)]="inputEmail" />
+                                          </c-input-group>
+                                      </div>
+                                  </c-modal-body>
+                                  <c-modal-body *ngIf="solicitouAcesso">
+                                      <i class="fa-light fa-clipboard-check fa-bounce fa-2x text-success" style="--fa-bounce-rebound: 1; --fa-animation-iteration-count: 2"></i>
+                                      <p>Sua solicitação de acesso foi enviada para a nossa equipe!</p>
+                                  </c-modal-body>
+
+                                  <c-modal-footer>
+                                      <button (click)="fechou()" [cModalToggle]="modalSolicitarAcesso.id" cButton color="secondary">Fechar</button>
+                                      <button (click)="enviarSolicitacao()" cButton color="primary" *ngIf="!solicitouAcesso">Enviar</button>
+                                  </c-modal-footer>
+                              </c-modal>
+                          </c-col>
+                      </c-card-body>
+                  </c-card>
+
+                  <!-- Form pesquisa rápida -->
+                  <c-card [ngStyle]="{ 'width.%': 44 }" class="bg-primary py-5">
+                      <c-card-body class="text-center">
+                          <form [formGroup]="formPesquisaRapida" class="text-white">
+                              <h2>Pesquisa rápida</h2>
+                              <p align="justify">Informe a peça que você está precisando. O NetPeças irá buscá-la em toda a rede de Distribuidores:</p>
+                              <div class="form-floating mb-3">
+                                  <select class="form-select" id="selectFabricantes" aria-label="Select fabricantes" formControlName="fabricante">
+                                      <option selected>Selecione um Fabricante</option>
+                                      <option *ngFor="let item of listaFabricantes" value="{{ item.codigo_fabricante }}">{{ item.nome_fabricante | uppercase }}</option>
+                                  </select>
+                                  <label for="selectFabricantes" class="text-black" style="font-size: 18px; padding: 13px">Selecione um Fabricante:</label>
+                              </div>
+                              <c-input-group class="p-0 border-1">
+                                  <span class="input-group-text" id="label-codigo_peca">Código da Peça</span>
+                                  <input id="codigo_peca" name="codigo_peca" type="text" aria-label="Código da peça" cFormControl formControlName="codigo_peca" />
+                              </c-input-group>
+                              <c-row class="d-flex justify-content-center">
+                                  <c-col xs="6">
+                                      <button [cModalToggle]="modalPesquisaRapida.id" (click)="consultarPecas()" class="px-4 input-group-text mt-3" type="submit">Pesquisar</button>
+                                  </c-col>
+                              </c-row>
+                          </form>
+
+                          <!-- Modal pesquisa rápida -->
+                          <c-modal #modalPesquisaRapida id="modalPesquisaRapida" alignment="center" size="xl">
+                              <c-modal-header>
+                                  <h5 cModalTitle>Consulta rápida</h5>
+                                  <button [cModalToggle]="modalPesquisaRapida.id" cButtonClose></button>
+                              </c-modal-header>
+
+                              <c-modal-body>
+                                  <p>Para efetuar o seu pedido é necessário acessar o sistema. Caso você não tenha um usuário aproveite para solicitar seu acesso.</p>
+                                  <table class="table-hover" [responsive]="true" [hover]="true" cTable>
+                                      <thead cTableColor="dark">
+                                          <tr>
+                                              <th scope="col">Distribuidor</th>
+                                              <th scope="col">UF</th>
+                                              <th scope="col" class="text-end">Disponível</th>
+                                              <th scope="col" class="text-start">Preço Unitário</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let item of listaPecas">
+                                              <td>{{ item.distribuidor | uppercase }}</td>
+                                              <td>{{ item.uf_loja }}</td>
+                                              <td class="text-end">{{ item.qtde_disponivel }}</td>
+                                              <td class="text-start">{{ item.preco_unitario }}</td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </c-modal-body>
+
+                              <c-modal-footer>
+                                  <button [cModalToggle]="modalPesquisaRapida.id" cButton color="secondary">Fechar</button>
+                                  <button cButton color="primary">Enviar</button>
+                              </c-modal-footer>
+                          </c-modal>
+                      </c-card-body>
+                  </c-card>
+              </c-card-group>
+          </c-col>
+      </c-row>
   </c-container>
 </div>

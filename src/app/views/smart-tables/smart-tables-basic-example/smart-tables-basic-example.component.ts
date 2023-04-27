@@ -20,7 +20,7 @@ export class SmartTablesBasicExampleComponent {
     { key: 'role', _style: { width: '20%' } },
     { key: 'status', _style: { width: '15%' } },
     {
-      key: 'show',
+      key: 'mostrar',
       label: '',
       _style: { width: '5%' },
       filter: false,

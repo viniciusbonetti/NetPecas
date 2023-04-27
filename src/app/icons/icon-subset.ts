@@ -1,4 +1,6 @@
 import {
+  cilInfo,
+  cilTruck,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,
@@ -92,6 +94,8 @@ import {
 } from '@coreui/icons';
 
 export const iconSubset = {
+  cilInfo,
+  cilTruck,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,

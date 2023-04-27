@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PagesRoutingModule } from './pages-routing.module';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { Page404Component } from './page404/page404.component';
-import { Page500Component } from './page500/page500.component';
+import { ConfiguracoesRoutingModule } from './configuracoes-routing.module';
+import { FabricanteComponent } from './fabricante/fabricante.component';
 import { ButtonModule, CardModule, FormModule, GridModule, ModalModule, TableModule } from '@coreui/angular-pro';
 import { IconModule } from '@coreui/icons-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,14 +10,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    RegisterComponent,
-    Page404Component,
-    Page500Component
+    FabricanteComponent
   ],
   imports: [
     CommonModule,
-    PagesRoutingModule,
+    ConfiguracoesRoutingModule,
     CardModule,
     ButtonModule,
     GridModule,
@@ -29,8 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     ModalModule,
-    TableModule
+    TableModule,
   ]
 })
-export class PagesModule {
-}
+export class ConfiguracoesModule { }

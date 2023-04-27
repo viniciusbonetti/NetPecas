@@ -1,0 +1,159 @@
+<c-card *ngIf="!novoCadastro">
+    <c-card-header>
+        <h1>Fabricantes</h1>
+    </c-card-header>
+
+    <c-card-body>
+        <c-row>
+            <c-col class="justify-content-end">
+                <button cButton class="px-4 mb-3" color="secondary" (click)="cadastrar()">
+                    <p class="m-0 text-white" ><i class="fa-regular fa-plus"></i>&nbsp; Adicionar</p>
+                </button>
+            </c-col>
+        </c-row>
+
+        <c-row>
+            <table [responsive]="true" [hover]="true" cTable>
+                <thead cTableColor="dark">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Ativo</th>
+                        <th>Açoes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let item of listaFabricantes">
+                        <td>{{ item.codigo_fabricante }}</td>
+                        <td>{{ item.nome_fabricante }}</td>
+                        <td>{{ item.tipo_fabricante }}</td>
+                        <td>
+                            <c-form-check>
+                                <input cFormCheckInput id="status_fabricante" type="checkbox" disabled [checked]="item.status_fabricante" />
+                            </c-form-check>
+                        </td>
+                        <td>
+                            <c-col xs-6>
+                                <button style="background: none; border: none" (click)="editar(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
+                                <button style="background: none; border: none"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
+                            </c-col>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </c-row>
+    </c-card-body>
+
+    <c-card-footer> Pagination </c-card-footer>
+</c-card>
+
+<div *ngIf="novoCadastro">
+    <c-card>
+        <c-card-header>
+            <c-col xs-6 class="d-flex justify-content-between">
+                <h1>Novo Fabricante</h1>
+                <button cButton color="primary" class="mb-1" (click)="voltar()"><i class="fa-regular fa-arrow-left"></i> Voltar</button>
+            </c-col>
+        </c-card-header>
+
+        <c-card-body>
+            
+            <!-- form cadastrar fabricante -->
+            <form cForm [formGroup]="formCadastrarFabricante">
+                <div class="form-floating mb-1 col-6">
+                    <select class="form-select" id="selectTiposFabricantes" aria-label="Select tipos do fabricante" formControlName="tipo_fabricante">
+                        <option value="AG">Agrícola</option>
+                        <option value="CT">Construção</option>
+                    </select>
+                    <label for="selectTiposFabricantes" class="text-black" style="font-size: 18px; padding: 13px">Selecione o tipo do fabricante:</label>
+                </div>
+                <c-input-group class="col-6 mb-1">
+                    <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span>
+                    <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" />
+                </c-input-group>
+                <c-input-group class="col-6 mb-1">
+                    <span class="input-group-text col-2" id="label-nome_fabricante">Nome</span>
+                    <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl formControlName="nome_fabricante" />
+                </c-input-group>
+                <c-input-group class="mb-1">
+                    <span class="input-group-text col-2" id="label-status_fabricante">
+                        Ativo:
+                        <c-form-check class="mx-5">
+                            <input class="p-2" cFormCheckInput id="status_fabricante" type="checkbox" formControlName="status_fabricante" />
+                        </c-form-check>
+                    </span>
+                </c-input-group>
+                <c-row>
+                    <c-col xs="6">
+                        <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendNovoFabricante()">Cadastrar</button>
+                    </c-col>
+                </c-row>
+            </form>
+        </c-card-body>
+
+        <c-card-header class="mt-5">
+            <h2>Negócios</h2>
+        </c-card-header>
+
+        <c-card-body>
+            <c-row>
+                <!-- Form cadastra Linhas -->
+                <form cRow [gutter]="3" class="align-items-center">
+                    <c-col [sm]="5">
+                        <c-input-group>
+                            <span class="input-group-text col-4" id="label-codigo_fabricante">Código do Negócio</span>
+                            <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl [disabled]="!cadastrarLinhas" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [sm]="6">
+                        <c-input-group>
+                            <span class="input-group-text col-2" id="label-nome_fabricante">Descrição</span>
+                            <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl [disabled]="!cadastrarLinhas" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [sm]="1">
+                        <c-col class="d-flex justify-content-around">
+                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
+                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
+                        </c-col>
+                    </c-col>
+                </form>
+            </c-row>
+
+            <!-- tabela das linhas -->
+            <c-row class="mt-3">
+                <table [responsive]="true" [hover]="true" cTable class="text-center">
+                    <thead cTableColor="dark">
+                        <tr>
+                            <th class="col-2">Código do negócio</th>
+                            <th>Descrição</th>
+                            <th class="col-2">Status</th>
+                            <th class="col-2">Açoes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let item of listaLinhas">
+                            <td >{{ item.codigo_negocio }}</td>
+                            <td>{{ item.descricao_negocio }}</td>
+                            <td>
+                                <c-form-check>
+                                    <input cFormCheckInput id="status_fabricante" type="checkbox" disabled [checked]="item.status_negocio" />
+                                </c-form-check>
+                            </td>
+                            <td>
+                                <c-col xs-6>
+                                    <button style="background: none; border: none"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
+                                    <button style="background: none; border: none"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
+                                </c-col>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </c-row>
+        </c-card-body>
+        <c-card-footer></c-card-footer>
+    </c-card>
+</div>
