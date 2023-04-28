@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ConfiguracoesRoutingModule } from './configuracoes-routing.module';
 import { FabricanteComponent } from './fabricante/fabricante.component';
-import { ButtonModule, CardModule, FormModule, GridModule, ModalModule, TableModule } from '@coreui/angular-pro';
+import { AlertModule, BadgeModule, ButtonModule, CardModule, CollapseModule, FormModule, GridModule, ModalModule, SharedModule, SmartTableModule, TableModule, UtilitiesModule } from '@coreui/angular-pro';
 import { IconModule } from '@coreui/icons-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,6 +24,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     ModalModule,
     TableModule,
+    GridModule,
+    CardModule,
+    SmartTableModule,
+    CollapseModule,
+    TableModule,
+    UtilitiesModule,
+    BadgeModule,
+    SharedModule,
+    ButtonModule,
+    AlertModule
   ]
 })
 export class ConfiguracoesModule { }

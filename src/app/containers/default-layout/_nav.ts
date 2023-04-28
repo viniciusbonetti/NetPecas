@@ -352,15 +352,15 @@ export const navItems: INavData[] = [
   //     text: 'NEW'
   //   }
   // },
-  // {
-  //   name: 'Smart Table',
-  //   url: '/smart-table',
-  //   iconComponent: { name: 'cil-grid'},
-  //   badge: {
-  //     color: 'danger-gradient',
-  //     text: 'PRO',
-  //   },
-  // },
+  {
+    name: 'Smart Table',
+    url: '/smart-table',
+    iconComponent: { name: 'cil-grid'},
+    badge: {
+      color: 'danger-gradient',
+      text: 'PRO',
+    },
+  },
   // {
   //   title: true,
   //   name: 'Plugins'

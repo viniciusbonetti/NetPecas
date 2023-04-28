@@ -62,13 +62,13 @@
             
             <!-- form cadastrar fabricante -->
             <form cForm [formGroup]="formCadastrarFabricante">
-                <div class="form-floating mb-1 col-6">
+                <!-- <div class="form-floating mb-1 col-6">
                     <select class="form-select" id="selectTiposFabricantes" aria-label="Select tipos do fabricante" formControlName="tipo_fabricante">
                         <option value="AG">Agrícola</option>
                         <option value="CT">Construção</option>
                     </select>
                     <label for="selectTiposFabricantes" class="text-black" style="font-size: 18px; padding: 13px">Selecione o tipo do fabricante:</label>
-                </div>
+                </div> -->
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span>
                     <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" />
@@ -77,6 +77,16 @@
                     <span class="input-group-text col-2" id="label-nome_fabricante">Nome</span>
                     <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl formControlName="nome_fabricante" />
                 </c-input-group>
+                <c-input-group class="mb-1">
+                    <label cInputGroupText for="selectTiposFabricantes" class="col-2">
+                      Tipo
+                    </label>
+                    <select cSelect id="selectTiposFabricantes">
+                        <option disabled selected value="">Selecione o tipo do fabricante</option>
+                        <option value="AG">Agrícola</option>
+                        <option value="CT">Construção</option>
+                    </select>
+                  </c-input-group>
                 <c-input-group class="mb-1">
                     <span class="input-group-text col-2" id="label-status_fabricante">
                         Ativo:
@@ -115,16 +125,32 @@
                     </c-col>
                     <c-col [sm]="1">
                         <c-col class="d-flex justify-content-around">
-                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
-                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
+                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none; box-shadow: none;"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
+                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none; box-shadow: none;"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
                         </c-col>
                     </c-col>
                 </form>
             </c-row>
 
+            <app-tabela-esperta-teste></app-tabela-esperta-teste>            
+            <!-- <c-smart-table (filteredItemsChange)="handleFilteredItems($event)" [columnFilter]="true" [columnSorter]="false" [itemsPerPage]="5" [items]="listaLinhas" [tableFilter]="true" [tableProps]="{ hover: true, responsive: true }" cleaner header pagination> 
+
+            </c-smart-table> -->
+
+            <!-- <c-col xs="12">
+                <c-card class="mb-4">
+                  <c-card-header ngPreserveWhitespaces>
+                    <strong>CoreUI Smart Table</strong> <small>Angular Table Component</small>
+                  </c-card-header>
+                  <c-card-body>
+                      <tabela-teste></tabela-teste>
+                  </c-card-body>
+                </c-card>
+              </c-col> -->
+
             <!-- tabela das linhas -->
             <c-row class="mt-3">
-                <table [responsive]="true" [hover]="true" cTable class="text-center">
+                <!-- <table [responsive]="true" [hover]="true" cTable class="text-center">
                     <thead cTableColor="dark">
                         <tr>
                             <th class="col-2">Código do negócio</th>
@@ -151,7 +177,8 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+                
             </c-row>
         </c-card-body>
         <c-card-footer></c-card-footer>
