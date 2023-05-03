@@ -7,7 +7,7 @@
         <c-row>
             <c-col class="justify-content-end">
                 <button cButton class="px-4 mb-3" color="secondary" (click)="cadastrar()">
-                    <p class="m-0 text-white" ><i class="fa-regular fa-plus"></i>&nbsp; Adicionar</p>
+                    <p class="m-0 text-white"><i class="fa-regular fa-plus"></i>&nbsp; Adicionar</p>
                 </button>
             </c-col>
         </c-row>
@@ -37,7 +37,7 @@
                         <td>
                             <c-col xs-6>
                                 <button style="background: none; border: none" (click)="editar(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
-                                <button style="background: none; border: none"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
+                                <button style="background: none; border: none" (click)="deletarFabricante(item)"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
                             </c-col>
                         </td>
                     </tr>
@@ -59,7 +59,6 @@
         </c-card-header>
 
         <c-card-body>
-            
             <!-- form cadastrar fabricante -->
             <form cForm [formGroup]="formCadastrarFabricante">
                 <!-- <div class="form-floating mb-1 col-6">
@@ -78,15 +77,17 @@
                     <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl formControlName="nome_fabricante" />
                 </c-input-group>
                 <c-input-group class="mb-1">
-                    <label cInputGroupText for="selectTiposFabricantes" class="col-2">
-                      Tipo
-                    </label>
-                    <select cSelect id="selectTiposFabricantes">
+                    <label cInputGroupText for="selectTiposFabricantes" class="col-2"> Tipo </label>
+                    <select cSelect id="selectTiposFabricantes" formControlName="tipo_fabricante">
                         <option disabled selected value="">Selecione o tipo do fabricante</option>
                         <option value="AG">Agrícola</option>
                         <option value="CT">Construção</option>
                     </select>
-                  </c-input-group>
+                </c-input-group>
+                <c-input-group class="col-6 mb-1">
+                    <span class="input-group-text col-2" id="label-data_ultima_carga">Última carga</span>
+                    <c-date-picker id="data_ultima_carga" name="data_ultima_carga" closeOnSelect formControlName="data_ultima_carga" placeholder="Selecione a data"></c-date-picker>
+                </c-input-group>
                 <c-input-group class="mb-1">
                     <span class="input-group-text col-2" id="label-status_fabricante">
                         Ativo:
@@ -97,7 +98,8 @@
                 </c-input-group>
                 <c-row>
                     <c-col xs="6">
-                        <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendNovoFabricante()">Cadastrar</button>
+                        <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendEditarFabricante()" *ngIf="cadastrarNegocio">Confirmar</button>
+                        <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendNovoFabricante()" *ngIf="!cadastrarNegocio">Cadastrar</button>
                     </c-col>
                 </c-row>
             </form>
@@ -109,76 +111,87 @@
 
         <c-card-body>
             <c-row>
-                <!-- Form cadastra Linhas -->
-                <form cRow [gutter]="3" class="align-items-center">
-                    <c-col [sm]="5">
-                        <c-input-group>
-                            <span class="input-group-text col-4" id="label-codigo_fabricante">Código do Negócio</span>
-                            <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl [disabled]="!cadastrarLinhas" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [sm]="6">
-                        <c-input-group>
-                            <span class="input-group-text col-2" id="label-nome_fabricante">Descrição</span>
-                            <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl [disabled]="!cadastrarLinhas" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [sm]="1">
-                        <c-col class="d-flex justify-content-around">
-                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none; box-shadow: none;"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
-                            <button cButton [disabled]="!cadastrarLinhas" style="background: none; border: none; box-shadow: none;"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
-                        </c-col>
+                <!-- Form cadastra Negocio -->
+                <form cRow [gutter]="3" [formGroup]="formCadastrarNegocio" class="align-items-center">
+                    <c-input-group>
+                        <span class="input-group-text col-3" id="label-codigo_negocio">Código do Negócio</span>
+                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" />
+                    </c-input-group>
+                    <c-input-group>
+                        <span class="input-group-text col-3" id="label-descricao_negocio">Descrição</span>
+                        <input id="descricao_negocio" name="descricao_negocio" type="text" aria-label="Nome do fabricante" cFormControl formControlName="descricao_negocio" />
+                    </c-input-group>
+                    <c-input-group class="mb-3">
+                        <label cInputGroupText for="selectTiposNegocio" class="col-2"> Tipo </label>
+                        <select cSelect id="selectTiposNegocio" formControlName="tipo_negocio">
+                            <option disabled selected value="">Selecione o tipo do negocio</option>
+                            <option value="AG">Agrícola</option>
+                            <option value="CT">Construção</option>
+                        </select>
+                    </c-input-group>
+                    <c-col class="d-flex ">
+                        <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none;" (click)="sendNovoNegocio()"><i class="fa-solid fa-square-check text-success" style="font-size: 1.5rem;">&nbsp;Confirmar </i></button>
+                        <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="limparForm()"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"style="font-size: 1.5rem;">&nbsp;Limpar </i></button>
                     </c-col>
                 </form>
             </c-row>
-
-            <app-tabela-esperta-teste></app-tabela-esperta-teste>            
-            <!-- <c-smart-table (filteredItemsChange)="handleFilteredItems($event)" [columnFilter]="true" [columnSorter]="false" [itemsPerPage]="5" [items]="listaLinhas" [tableFilter]="true" [tableProps]="{ hover: true, responsive: true }" cleaner header pagination> 
-
-            </c-smart-table> -->
-
-            <!-- <c-col xs="12">
-                <c-card class="mb-4">
-                  <c-card-header ngPreserveWhitespaces>
-                    <strong>CoreUI Smart Table</strong> <small>Angular Table Component</small>
-                  </c-card-header>
-                  <c-card-body>
-                      <tabela-teste></tabela-teste>
-                  </c-card-body>
-                </c-card>
-              </c-col> -->
-
-            <!-- tabela das linhas -->
             <c-row class="mt-3">
-                <!-- <table [responsive]="true" [hover]="true" cTable class="text-center">
-                    <thead cTableColor="dark">
-                        <tr>
-                            <th class="col-2">Código do negócio</th>
-                            <th>Descrição</th>
-                            <th class="col-2">Status</th>
-                            <th class="col-2">Açoes</th>
-                        </tr>
-                    </thead>
+                <!-- tabela negocios -->
+                <form cForm [formGroup]="formEditarNegocio">
+                    <table [responsive]="true" [hover]="true" cTable class="text-center">
+                        <thead cTableColor="dark">
+                            <tr>
+                                <th class="col-2">Código do negócio</th>
+                                <th>Descrição</th>
+                                <th class="col-2">Status</th>
+                                <th class="col-2">Açoes</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <tr *ngFor="let item of listaLinhas">
-                            <td >{{ item.codigo_negocio }}</td>
-                            <td>{{ item.descricao_negocio }}</td>
-                            <td>
-                                <c-form-check>
-                                    <input cFormCheckInput id="status_fabricante" type="checkbox" disabled [checked]="item.status_negocio" />
-                                </c-form-check>
-                            </td>
-                            <td>
-                                <c-col xs-6>
-                                    <button style="background: none; border: none"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
-                                    <button style="background: none; border: none"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
-                                </c-col>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
-                
+                        <tbody>
+                            <tr *ngFor="let item of listaNegocio">
+                                <td *ngIf="!item.editarItemNegocio">{{ item.codigo_negocio }}</td>
+                                <td *ngIf="!item.editarItemNegocio">{{ item.descricao_negocio }}</td>
+                                <td *ngIf="!item.editarItemNegocio">
+                                    <c-form-check>
+                                        <input cFormCheckInput id="status_negocio" type="checkbox" disabled [checked]="item.status_negocio" />
+                                    </c-form-check>
+                                </td>
+                                <td *ngIf="!item.editarItemNegocio">
+                                    <c-col xs-6>
+                                        <button style="background: none; border: none" (click)="editarNegocio(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
+                                        <button style="background: none; border: none" (click)="deletarNegocio(item)"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
+                                    </c-col>
+                                </td>
+
+                                <!-- editar negocio -->
+                                <td *ngIf="item.editarItemNegocio">
+                                    <c-input-group>
+                                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negocio" cFormControl formControlName="codigo_negocio" placeholder="Código" />
+                                    </c-input-group>
+                                </td>
+                                <td *ngIf="item.editarItemNegocio">
+                                    <c-input-group>
+                                        <input id="descricao_negocio" name="descricao_negocio" type="text" aria-label="Nome do fabricante" cFormControl formControlName="descricao_negocio" placeholder="Descrição" />
+                                    </c-input-group>
+                                </td>
+                                <td *ngIf="item.editarItemNegocio">
+                                    <c-input-group class="mb-1">
+                                        <c-form-check class="mx-5">
+                                            <input class="p-2" cFormCheckInput id="status_negocio" type="checkbox" formControlName="status_negocio" />
+                                        </c-form-check>
+                                    </c-input-group>
+                                </td>
+                                <td *ngIf="item.editarItemNegocio">
+                                    <c-col class="d-flex">
+                                        <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="sendEditarNegocio()"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
+                                        <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none"(click)="cancelar(item)"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
+                                    </c-col>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
             </c-row>
         </c-card-body>
         <c-card-footer></c-card-footer>

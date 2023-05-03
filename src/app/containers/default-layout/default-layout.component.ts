@@ -19,8 +19,6 @@ export class DefaultLayoutComponent {
 
   ngOnInit(): void {
     let logado = localStorage.getItem("logado")
-    console.log('esta logado');
-    console.log(logado);
     if(logado != 'true'){
       this.router.navigate(["/login"]);
     }

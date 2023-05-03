@@ -24,6 +24,7 @@ export class ControllerComponent {
       consultaCnpj: '/consultaCnpj',
       fabricante: '/fabricante',
       fabricanteNegocio: '/fabricanteNegocio',
+      negocio: '/negocio',
   };
 
   public getToken(){
@@ -77,27 +78,41 @@ export class ControllerComponent {
       return resposta;
   }
 
-  // public async putInfo(path, form, header){
-  //     this.formError();
-  //     let urlPut = this.baseUrl + path;
-  //     try {
-  //         let putInfo = await axios.put(urlPut, form, header);
-  //         return putInfo;
-  //     } catch (error) {
-  //         this.mostrarErros(error);
-  //     }
-  // }
+  public async putInfo(path: string, form: object){
+    let token = await this.getToken();
+      let urlPut = this.baseUrl + path;
+      console.log(urlPut);
+      
+      let resposta = await axios.put(urlPut, form, token).catch(function(response){
+          return response
+      });        
+      return resposta;
+    //   this.formError();
+    //   let urlPut = this.baseUrl + path;
+    //   try {
+    //       let putInfo = await axios.put(urlPut, form, header);
+    //       return putInfo;
+    //   } catch (error) {
+    //       this.mostrarErros(error);
+    //   }
+  }
 
-  // public async deleteInfo(path, header){
-  //     this.formError();
-  //     let urlDelete = this.baseUrl + path;
-  //     try {
-  //         let deleteInfo = await axios.delete(urlDelete, header);
-  //         return deleteInfo;
-  //     } catch (error){
-  //         this.mostrarErros(error);
-  //     }
-  // }
+  public async deleteInfo(path: string){
+    let token = await this.getToken();
+      let urlDelete = this.baseUrl + path;
+      let resposta = await axios.delete(urlDelete, token).catch(function(response){
+          return response
+      });        
+      return resposta;
+    //   this.formError();
+    //   let urlDelete = this.baseUrl + path;
+    //   try {
+    //       let deleteInfo = await axios.delete(urlDelete, header);
+    //       return deleteInfo;
+    //   } catch (error){
+    //       this.mostrarErros(error);
+    //   }
+  }
 
   // public formError() {
   //     var formError = document.getElementsByClassName("form-error");
