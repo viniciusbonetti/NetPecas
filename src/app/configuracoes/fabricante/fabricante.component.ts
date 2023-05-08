@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { IColumn, IItem } from "@coreui/angular-pro/lib/smart-table/smart-table.type";
 import { ControllerComponent } from "src/app/controller/controller/controller.component";
 
 @Component({
@@ -14,7 +15,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     formEditarNegocio!: FormGroup;
 
     // listas
-    listaFabricantes: any;
+    listaFabricantes: IItem[];
     listaNegocio: any;
 
     // booleans
@@ -49,9 +50,8 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             }
             // { validators: [PasswordValidators.confirmPassword] }
         );
-        this.formCadastrarFabricante.controls['data_ultima_carga'].disable()
+        this.formCadastrarFabricante.controls["data_ultima_carga"].disable();
         // this.formControlsCadastrarFabricante = Object.keys(this.formCadastrarFabricante.controls);
-
 
         // form cadastrar negocio
         this.formCadastrarNegocio = this.formBuilder.group({
@@ -60,7 +60,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             tipo_negocio: [""],
             descricao_negocio: [""],
         });
-        this.formCadastrarNegocio.disable()
+        this.formCadastrarNegocio.disable();
 
         // form editar negocio
         this.formEditarNegocio = this.formBuilder.group({
@@ -72,7 +72,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         });
     }
 
-    limparForm(){
+    limparForm() {
         this.formCadastrarNegocio.reset();
     }
 
@@ -85,12 +85,14 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         this.novoCadastro = false;
         this.cadastrarNegocio = false;
         this.listaNegocio = [];
-        this.idFabricante = '';
-        this.codigoFabricante = '';
-        this.idNegocio = '';
+        this.idFabricante = "";
+        this.codigoFabricante = "";
+        this.idNegocio = "";
         this.formCadastrarFabricante.reset();
         this.formCadastrarNegocio.reset();
-        this.formCadastrarNegocio.disable()
+        this.formEditarNegocio.reset();
+        this.formCadastrarNegocio.disable();
+        this.getFabricante();
     }
 
     // Cadastrar Fabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,14 +104,14 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         let resposta = await this.postInfo(this.paths.fabricante, this.formCadastrarFabricante.value);
         if (resposta.status === 200) {
             this.cadastrarNegocio = true;
-            this.formCadastrarFabricante.controls['data_ultima_carga'].enable()
-            this.formCadastrarNegocio.enable()
+            this.formCadastrarFabricante.controls["data_ultima_carga"].enable();
+            this.formCadastrarNegocio.enable();
         }
     }
 
     // Editar Fabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async getListaNegocio() {
-        let resposta = await this.postInfo(this.paths.fabricanteNegocio, {codigo_fabricante: this.codigoFabricante});
+        let resposta = await this.postInfo(this.paths.fabricanteNegocio, { codigo_fabricante: this.codigoFabricante });
         console.log("Negocio", resposta.data.data);
         this.listaNegocio = resposta.data.data;
     }
@@ -117,8 +119,8 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     async editar(item: any) {
         this.novoCadastro = true;
         this.cadastrarNegocio = true;
-        this.formCadastrarFabricante.controls['data_ultima_carga'].enable()
-        this.formCadastrarNegocio.enable()
+        this.formCadastrarFabricante.controls["data_ultima_carga"].enable();
+        this.formCadastrarNegocio.enable();
         this.formCadastrarFabricante.setValue({
             codigo_fabricante: item.codigo_fabricante,
             nome_fabricante: item.nome_fabricante,
@@ -126,7 +128,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             data_ultima_carga: item.data_ultima_carga,
             status_fabricante: item.status_fabricante,
         });
-        
+
         this.idFabricante = item.id;
         this.codigoFabricante = item.codigo_fabricante;
         await this.getListaNegocio();
@@ -160,7 +162,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
 
     // Editar Negocio //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     editarNegocio(item: any) {
-        item.editarItemNegocio =  true;
+        item.editarItemNegocio = true;
         this.formEditarNegocio.setValue({
             codigo_fabricante: this.codigoFabricante,
             codigo_negocio: item.codigo_negocio,
@@ -170,7 +172,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         });
         this.idNegocio = item.id;
     }
-    async sendEditarNegocio(){
+    async sendEditarNegocio() {
         let resposta = await this.putInfo(this.paths.negocio + `/${this.idNegocio}`, this.formEditarNegocio.value);
         if (resposta.status === 200) {
             this.editarItemNegocio = false;
@@ -178,17 +180,54 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         }
     }
 
-    cancelar(item: any){
+    cancelar(item: any) {
         this.formEditarNegocio.reset();
         item.editarItemNegocio = false;
-        this.idNegocio = '';
+        this.idNegocio = "";
     }
 
     // Excluir Negocio ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async deletarNegocio(item: any){
+    async deletarNegocio(item: any) {
         let resposta = await this.deleteInfo(this.paths.negocio + `/${item.id}`);
-        if(resposta.status === 200){
+        if (resposta.status === 200) {
             this.getListaNegocio();
         }
+    }
+
+    // teste ///////////////////////////////////////////////////////
+    // usersData: IItem[] = this.listaFabricantes;
+
+    columns: (IColumn | string)[] = [
+        {
+            key: "codigo_fabricante",
+            label: "Código",
+            _style: { width: "10%" },
+        },
+        {
+            key: "nome_fabricante",
+            label: "Nome",
+            _style: { width: "40%" },
+        },
+        {
+            key: "tipo_fabricante",
+            label: "Tipo",
+            _style: { width: "10%" },
+        },
+        {
+            key: "status_fabricante",
+            label: "Status",
+            _style: { width: "10%" },
+            filter: false,
+        },
+        {
+            key: "acoes",
+            label: "",
+            _style: { width: "10%" },
+            filter: false,
+            sorter: false,
+        },
+    ];
+    getItem(item: any) {
+        return Object.keys(item);
     }
 }
