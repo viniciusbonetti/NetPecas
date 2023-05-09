@@ -92,7 +92,21 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         this.formCadastrarNegocio.reset();
         this.formEditarNegocio.reset();
         this.formCadastrarNegocio.disable();
+        this.formCadastrarFabricante.controls["data_ultima_carga"].disable();
         this.getFabricante();
+    }
+
+    cancelar(item: any) {
+        this.formEditarNegocio.reset();
+        item.editarItemNegocio = false;
+        this.idNegocio = "";
+
+        this.corToast = "dark";
+        this.posicaoToast = "bottom-center";
+        this.tituloToast = "";
+        this.mensagemToast = "Ação cancelada";
+        this.corTextoToast = 'text-white';
+        this.toggleToast();
     }
 
     // Cadastrar Fabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +120,19 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.cadastrarNegocio = true;
             this.formCadastrarFabricante.controls["data_ultima_carga"].enable();
             this.formCadastrarNegocio.enable();
+            this.corToast = "success";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Sucesso!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Novo fabricante cadastrado!";
+        }else {
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Verifique os dados cadastrados.";
         }
+        this.toggleToast();
     }
 
     // Editar Fabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,14 +165,32 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         let resposta = await this.putInfo(path, this.formCadastrarFabricante.value);
         if (resposta.status === 200) {
             this.cadastrarNegocio = true;
+            this.corToast = "success";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Sucesso!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Fabricante atualizado!";
+        }else {
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Verifique os dados cadastrados.";
         }
+        this.toggleToast();
     }
 
     // Excluir Fabricante /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async deletarFabricante(item: any) {
-        const path = this.paths.fabricante + `/${item.id}`;
-        let resposta = await this.deleteInfo(path);
-        this.getFabricante();
+        const type = "warning-message-and-cancel";
+        this.mensagemTitulo = "Deseja deletar o fabricante?";
+        this.mensagemAlerta = "Esta ação não será reversível e irá deletar todos os registros relacionados ao fabricante!";
+        await this.showSwal(type);
+        if (this.resultado) {
+            const path = this.paths.fabricante + `/${item.id}`;
+            let resposta = await this.deleteInfo(path);
+            this.getFabricante();
+        }
     }
 
     // Cadastrar Negócio ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,7 +199,19 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         let resposta = await this.postInfo(this.paths.negocio, this.formCadastrarNegocio.value);
         if (resposta.status === 200) {
             this.cadastrarNegocio = true;
+            this.corToast = "success";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Sucesso!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Novo negócio cadastrado!";
+        }else {
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Verifique os dados cadastrados.";
         }
+        this.toggleToast();
         this.getListaNegocio();
     }
 
@@ -175,21 +231,35 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         let resposta = await this.putInfo(this.paths.negocio + `/${this.idNegocio}`, this.formEditarNegocio.value);
         if (resposta.status === 200) {
             this.editarItemNegocio = false;
-            this.getListaNegocio();
+            this.corToast = "success";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Sucesso!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Negócio atualizado!";
+        }else {
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = 'text-black';
+            this.mensagemToast = "Verifique os dados cadastrados.";
         }
+        this.toggleToast();
+        this.getListaNegocio();
     }
 
-    cancelar(item: any) {
-        this.formEditarNegocio.reset();
-        item.editarItemNegocio = false;
-        this.idNegocio = "";
-    }
 
     // Excluir Negocio ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async deletarNegocio(item: any) {
-        let resposta = await this.deleteInfo(this.paths.negocio + `/${item.id}`);
-        if (resposta.status === 200) {
-            this.getListaNegocio();
+        const type = "warning-message-and-cancel";
+        this.mensagemTitulo = "Deseja deletar o negócio?";
+        this.mensagemAlerta = "Esta ação não será reversível e irá deletar todos os registros relacionados ao negócio!";
+        await this.showSwal(type);
+        if (this.resultado){
+            let resposta = await this.deleteInfo(this.paths.negocio + `/${item.id}`);
+            if (resposta.status === 200) {
+                this.getListaNegocio();
+            }
+
         }
     }
 

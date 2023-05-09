@@ -1,12 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import axios from "axios";
+import { SweetAlertsControllerComponent } from "src/app/sweet-alerts-controller/sweet-alerts-controller.component";
 
 @Component({
     selector: "app-controller",
     templateUrl: "./controller.component.html",
     styleUrls: ["./controller.component.scss"],
 })
-export class ControllerComponent {
+export class ControllerComponent extends SweetAlertsControllerComponent {
     public baseUrl = "https://dornez.vps-kinghost.net:81/api";
     // public headers = { Authorization: this.getToken, "Content-Type": "application/json" };
     // public setToken = { headers: this.headers };
@@ -27,8 +28,6 @@ export class ControllerComponent {
         fabricanteNegocio: "/fabricanteNegocio",
         negocio: "/negocio",
     };
-
-    constructor(){}
 
     public getToken() {
         let token = localStorage.getItem("token");

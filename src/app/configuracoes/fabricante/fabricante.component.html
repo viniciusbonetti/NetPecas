@@ -72,7 +72,7 @@
                 <button cButton color="primary" class="mb-1" (click)="voltar()"><i class="fa-regular fa-arrow-left"></i> Voltar</button>
             </c-col>
         </c-card-header>
-
+        
         <c-card-body>
             <!-- form cadastrar fabricante -->
             <form cForm [formGroup]="formCadastrarFabricante">
@@ -165,7 +165,7 @@
                         [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
                         [tableFilterPlaceholder]="''"
                         [tableProps]="{ hover: true, responsive: true }"
-                        [noItemsLabel]="'Nenhum negócio cadastrado'"
+                        [noItemsLabel]="'Nenhum negócio encontrado'"
                         class="text-center minha-tabela-bunitinha"
                     >
                         <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
@@ -232,3 +232,30 @@
         <c-card-footer></c-card-footer>
     </c-card>
 </div>
+
+<c-toaster [placement]="posicaoToast" class="p-3" position="fixed">
+    <c-toast
+      (timer)="onTimerChange($event)"
+      (visibleChange)="onVisibleChange($event)"
+      [visible]="visivelToast"
+      [delay]="5500"
+      color="{{ corToast }}">
+      <c-toast-header *ngIf="tituloToast">
+        <h5 class="{{ corTextoToast }}">
+            <strong>
+                {{ tituloToast }}
+            </strong>
+        </h5>
+      </c-toast-header>
+      <c-toast-body>
+        <p class="{{ corTextoToast }}" style="font-size: 1rem;">
+             <strong>
+                {{ mensagemToast }}
+            </strong>
+        </p>
+        <c-progress thin>
+          <c-progress-bar [value]="barraPorcentagemToast"></c-progress-bar>
+        </c-progress>
+      </c-toast-body>
+    </c-toast>
+  </c-toaster>
