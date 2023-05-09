@@ -16,7 +16,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
 
     // listas
     listaFabricantes: IItem[];
-    listaNegocio: any;
+    listaNegocio: IItem[];
 
     // booleans
     novoCadastro: boolean = false;
@@ -136,7 +136,6 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
 
     async sendEditarFabricante() {
         const path = this.paths.fabricante + `/${this.idFabricante}`;
-
         let resposta = await this.putInfo(path, this.formCadastrarFabricante.value);
         if (resposta.status === 200) {
             this.cadastrarNegocio = true;
@@ -194,10 +193,9 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         }
     }
 
-    // teste ///////////////////////////////////////////////////////
-    // usersData: IItem[] = this.listaFabricantes;
+    // Tabelas /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    columns: (IColumn | string)[] = [
+    colunasFabricante: (IColumn | string)[] = [
         {
             key: "codigo_fabricante",
             label: "Código",
@@ -227,7 +225,30 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             sorter: false,
         },
     ];
-    getItem(item: any) {
-        return Object.keys(item);
-    }
+
+    colunasNegocio: (IColumn | string)[] = [
+        {
+            key: "codigo_negocio",
+            label: "Código do negócio",
+            _style: { width: "10%" },
+        },
+        {
+            key: "descricao_negocio",
+            label: "Descrição",
+            _style: { width: "40%" },
+        },
+        {
+            key: "status_negocio",
+            label: "Status",
+            _style: { width: "10%" },
+            filter: false,
+        },
+        {
+            key: "acoes",
+            label: "",
+            _style: { width: "10%" },
+            filter: false,
+            sorter: false,
+        },
+    ];
 }

@@ -12,13 +12,14 @@
             </c-col>
         </c-row>
 
+        <!-- Tabela fabricantes -->
         <c-smart-table
             #smartTable="cSmartTable"
             activePage="1"
             cleaner
             [columnFilter]="true"
             [columnSorter]="true"
-            [columns]="columns"
+            [columns]="colunasFabricante"
             [itemsPerPageSelect]="true"
             pagination
             [itemsPerPageLabel]="'Itens por pagina:'"
@@ -31,6 +32,7 @@
             [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
             [tableFilterPlaceholder]="''"
             [tableProps]="{ hover: true, responsive: true }"
+            [noItemsLabel]="'Nenhum fabriante encontrado'"
             class="text-center minha-tabela-bunitinha"
         >
             <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
@@ -59,39 +61,6 @@
                 </td>
             </ng-template>
         </c-smart-table>
-
-        <!-- <c-row>
-            <table [responsive]="true" [hover]="true" cTable>
-                <thead cTableColor="dark">
-                    <tr>
-                        <th>Código</th>
-                        <th>Nome</th>
-                        <th>Tipo</th>
-                        <th>Ativo</th>
-                        <th>Açoes</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr *ngFor="let item of listaFabricantes">
-                        <td>{{ item.codigo_fabricante }}</td>
-                        <td>{{ item.nome_fabricante }}</td>
-                        <td>{{ item.tipo_fabricante }}</td>
-                        <td>
-                            <c-form-check>
-                                <input cFormCheckInput id="status_fabricante" type="checkbox" disabled [checked]="item.status_fabricante" />
-                            </c-form-check>
-                        </td>
-                        <td>
-                            <c-col xs-6>
-                                <button style="background: none; border: none" (click)="editar(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
-                                <button style="background: none; border: none" (click)="deletarFabricante(item)"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
-                            </c-col>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </c-row> -->
     </c-card-body>
 </c-card>
 
@@ -151,7 +120,7 @@
         <c-card-body>
             <c-row>
                 <!-- Form cadastra Negocio -->
-                <form cRow [gutter]="3" [formGroup]="formCadastrarNegocio" class="align-items-center">
+                <form cRow [gutter]="1" [formGroup]="formCadastrarNegocio" class="align-items-center">
                     <c-input-group>
                         <span class="input-group-text col-3" id="label-codigo_negocio">Código do Negócio</span>
                         <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" />
@@ -175,61 +144,88 @@
                 </form>
             </c-row>
             <c-row class="mt-3">
-                <!-- tabela negocios -->
+                <!-- Tabela Negocios -->                
                 <form cForm [formGroup]="formEditarNegocio">
-                    <table [responsive]="true" [hover]="true" cTable class="text-center">
-                        <thead cTableColor="dark">
-                            <tr>
-                                <th class="col-2">Código do negócio</th>
-                                <th>Descrição</th>
-                                <th class="col-2">Status</th>
-                                <th class="col-2">Açoes</th>
-                            </tr>
-                        </thead>
+                    <c-smart-table
+                        #smartTable="cSmartTable"
+                        activePage="1"
+                        cleaner
+                        [columnFilter]="true"
+                        [columnSorter]="true"
+                        [columns]="colunasNegocio"
+                        [itemsPerPageSelect]="true"
+                        pagination
+                        [itemsPerPageLabel]="'Itens por pagina:'"
+                        [itemsPerPage]="10"
+                        [items]="listaNegocio"
+                        [sorterValue]="{ column: 'name', state: 'asc' }"
+                        [tableBodyProps]="{align: 'middle'}"
+                        header
+                        [tableFilter]="true"
+                        [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
+                        [tableFilterPlaceholder]="''"
+                        [tableProps]="{ hover: true, responsive: true }"
+                        [noItemsLabel]="'Nenhum negócio cadastrado'"
+                        class="text-center minha-tabela-bunitinha"
+                    >
+                        <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+                            <td>
+                                <ng-container [ngSwitch]="columnName">
+                                    <ng-container *ngSwitchCase="'codigo_negocio'">
+                                        <div *ngIf="!item.editarItemNegocio">{{ item.codigo_negocio }}</div>
+                                        <div *ngIf="item.editarItemNegocio">
+                                            <c-input-group>
+                                                <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negocio" cFormControl formControlName="codigo_negocio" placeholder="Código" />
+                                            </c-input-group>
+                                        </div>
+                                    </ng-container>
 
-                        <tbody>
-                            <tr *ngFor="let item of listaNegocio">
-                                <td *ngIf="!item.editarItemNegocio">{{ item.codigo_negocio }}</td>
-                                <td *ngIf="!item.editarItemNegocio">{{ item.descricao_negocio }}</td>
-                                <td *ngIf="!item.editarItemNegocio">
-                                    <c-form-check>
-                                        <input cFormCheckInput id="status_negocio" type="checkbox" disabled [checked]="item.status_negocio" />
-                                    </c-form-check>
-                                </td>
-                                <td *ngIf="!item.editarItemNegocio">
-                                    <c-col xs-6>
-                                        <button style="background: none; border: none" (click)="editarNegocio(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
-                                        <button style="background: none; border: none" (click)="deletarNegocio(item)"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
-                                    </c-col>
-                                </td>
+                                    <ng-container *ngSwitchCase="'descricao_negocio'">
+                                        <div *ngIf="!item.editarItemNegocio">{{ item.descricao_negocio }}</div>
+                                        <div *ngIf="item.editarItemNegocio">
+                                            <c-input-group>
+                                                <input id="descricao_negocio" name="descricao_negocio" type="text" aria-label="Descrição do negocio" cFormControl formControlName="descricao_negocio" placeholder="Descrição" />
+                                            </c-input-group>
+                                        </div>
+                                    </ng-container>
 
-                                <!-- editar negocio -->
-                                <td *ngIf="item.editarItemNegocio">
-                                    <c-input-group>
-                                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negocio" cFormControl formControlName="codigo_negocio" placeholder="Código" />
-                                    </c-input-group>
-                                </td>
-                                <td *ngIf="item.editarItemNegocio">
-                                    <c-input-group>
-                                        <input id="descricao_negocio" name="descricao_negocio" type="text" aria-label="Nome do fabricante" cFormControl formControlName="descricao_negocio" placeholder="Descrição" />
-                                    </c-input-group>
-                                </td>
-                                <td *ngIf="item.editarItemNegocio">
-                                    <c-input-group class="mb-1">
-                                        <c-form-check class="mx-5">
-                                            <input class="p-2" cFormCheckInput id="status_negocio" type="checkbox" formControlName="status_negocio" />
-                                        </c-form-check>
-                                    </c-input-group>
-                                </td>
-                                <td *ngIf="item.editarItemNegocio">
-                                    <c-col class="d-flex">
-                                        <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="sendEditarNegocio()"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
-                                        <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="cancelar(item)"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
-                                    </c-col>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <ng-container *ngSwitchCase="'status_negocio'">
+                                        <div *ngIf="!item.editarItemNegocio">
+                                            <c-form-check class="d-flex justify-content-center">
+                                                <input cFormCheckInput id="status_negocio" type="checkbox" disabled [checked]="item.status_negocio" />
+                                            </c-form-check>
+                                        </div>
+                                        <div *ngIf="item.editarItemNegocio">
+                                            <c-input-group class="mb-1">
+                                                <c-form-check class="mx-5">
+                                                    <input class="p-2" cFormCheckInput id="status_negocio" type="checkbox" formControlName="status_negocio" />
+                                                </c-form-check>
+                                            </c-input-group>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngSwitchCase="'acoes'" class="py-2">
+                                        <div *ngIf="!item.editarItemNegocio">
+                                            <c-col xs-6>
+                                                <button style="background: none; border: none" (click)="editarNegocio(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
+                                                <button style="background: none; border: none" (click)="deletarNegocio(item)"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
+                                            </c-col>
+                                        </div>
+                                        <div *ngIf="item.editarItemNegocio">
+                                            <c-col class="d-flex">
+                                                <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="sendEditarNegocio()"><i class="fa-solid fa-square-check fa-2x text-success"></i></button>
+                                                <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="cancelar(item)"><i class="fa-solid fa-rectangle-xmark fa-2x text-danger"></i></button>
+                                            </c-col>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngSwitchDefault>
+                                        {{tdContent}}
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                        </ng-template>
+                    </c-smart-table>
                 </form>
             </c-row>
         </c-card-body>
