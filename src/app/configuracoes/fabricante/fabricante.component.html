@@ -75,22 +75,25 @@
         
         <c-card-body>
             <!-- form cadastrar fabricante -->
-            <form cForm [formGroup]="formCadastrarFabricante">
+            <form cForm [formGroup]="formCadastrarFabricante" noValidate>
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span>
-                    <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" />
+                    <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.valid"/>
+                    <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-nome_fabricante">Nome</span>
-                    <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl formControlName="nome_fabricante" />
+                    <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl formControlName="nome_fabricante" [valid]="this.formCadastrarFabricante.controls['nome_fabricante'].errors?.valid"/>
+                    <c-form-feedback [valid]="this.formCadastrarFabricante.controls['nome_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['nome_fabricante'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
                 <c-input-group class="mb-1">
                     <label cInputGroupText for="selectTiposFabricantes" class="col-2"> Tipo </label>
-                    <select cSelect id="selectTiposFabricantes" formControlName="tipo_fabricante">
+                    <select cSelect id="selectTiposFabricantes" formControlName="tipo_fabricante" [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.valid">
                         <option disabled selected value="">Selecione o tipo do fabricante</option>
                         <option value="AG">Agrícola</option>
                         <option value="CT">Construção</option>
                     </select>
+                    <c-form-feedback [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-data_ultima_carga">Última carga</span>
@@ -238,7 +241,7 @@
       (timer)="onTimerChange($event)"
       (visibleChange)="onVisibleChange($event)"
       [visible]="visivelToast"
-      [delay]="5500"
+      [delay]="3000"
       color="{{ corToast }}">
       <c-toast-header *ngIf="tituloToast">
         <h5 class="{{ corTextoToast }}">
@@ -253,9 +256,9 @@
                 {{ mensagemToast }}
             </strong>
         </p>
-        <c-progress thin>
+        <!-- <c-progress thin>
           <c-progress-bar [value]="barraPorcentagemToast"></c-progress-bar>
-        </c-progress>
+        </c-progress> -->
       </c-toast-body>
     </c-toast>
   </c-toaster>

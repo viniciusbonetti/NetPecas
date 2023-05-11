@@ -17,11 +17,13 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     // listas
     listaFabricantes: IItem[];
     listaNegocio: IItem[];
+    listaErros = [];
 
     // booleans
     novoCadastro: boolean = false;
     cadastrarNegocio: boolean = false;
     editarItemNegocio: boolean = false;
+    manualValidation: any;
 
     // Ids
     idFabricante: string = "";
@@ -82,6 +84,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     }
 
     voltar() {
+        this.manualValidation = ''
         this.novoCadastro = false;
         this.cadastrarNegocio = false;
         this.listaNegocio = [];
@@ -105,7 +108,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         this.posicaoToast = "bottom-center";
         this.tituloToast = "";
         this.mensagemToast = "Ação cancelada";
-        this.corTextoToast = 'text-white';
+        this.corTextoToast = "text-white";
         this.toggleToast();
     }
 
@@ -117,20 +120,49 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     async sendNovoFabricante() {
         let resposta = await this.postInfo(this.paths.fabricante, this.formCadastrarFabricante.value);
         if (resposta.status === 200) {
+            this.manualValidation = true;
             this.cadastrarNegocio = true;
             this.formCadastrarFabricante.controls["data_ultima_carga"].enable();
             this.formCadastrarNegocio.enable();
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Novo fabricante cadastrado!";
-        }else {
+        } else {
+            this.formCadastrarFabricante.controls["codigo_fabricante"].setErrors(null);
+            // console.log(this.formCadastrarFabricante.controls);
+            
+            this.listaErros = resposta.response.data.data;
+            this.manualValidation = false;
+
+            this.listaErros.forEach((item) => {
+                switch (item["campo"]) {
+                    case "codigo_fabricante": {
+                        this.formCadastrarFabricante.controls["codigo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
+                        break;
+                    }
+                    case "nome_fabricante": {
+                        this.formCadastrarFabricante.controls["nome_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
+                        break;
+                    }
+
+                    case "tipo_fabricante": {
+                        this.formCadastrarFabricante.controls["tipo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
+                        break;
+                    }
+                }
+            });
+
+            // console.log(this.formCadastrarFabricante.controls['tipo_fabricante']);
+            // console.log(this.formCadastrarFabricante.controls['nome_fabricante']);
+            // console.log(this.formCadastrarFabricante.controls['codigo_fabricante'].errors);
+            
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
-            this.corTextoToast = 'text-black';
-            this.mensagemToast = "Verifique os dados cadastrados.";
+            this.corTextoToast = "text-black";
+            this.mensagemToast = resposta.response.data.message;
         }
         this.toggleToast();
     }
@@ -168,13 +200,13 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Fabricante atualizado!";
-        }else {
+        } else {
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Verifique os dados cadastrados.";
         }
         this.toggleToast();
@@ -202,13 +234,13 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Novo negócio cadastrado!";
-        }else {
+        } else {
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Verifique os dados cadastrados.";
         }
         this.toggleToast();
@@ -234,19 +266,18 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Negócio atualizado!";
-        }else {
+        } else {
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
-            this.corTextoToast = 'text-black';
+            this.corTextoToast = "text-black";
             this.mensagemToast = "Verifique os dados cadastrados.";
         }
         this.toggleToast();
         this.getListaNegocio();
     }
-
 
     // Excluir Negocio ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async deletarNegocio(item: any) {
@@ -254,12 +285,11 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         this.mensagemTitulo = "Deseja deletar o negócio?";
         this.mensagemAlerta = "Esta ação não será reversível e irá deletar todos os registros relacionados ao negócio!";
         await this.showSwal(type);
-        if (this.resultado){
+        if (this.resultado) {
             let resposta = await this.deleteInfo(this.paths.negocio + `/${item.id}`);
             if (resposta.status === 200) {
                 this.getListaNegocio();
             }
-
         }
     }
 
