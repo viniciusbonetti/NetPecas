@@ -80,7 +80,7 @@ export const navItems: INavData[] = [
             url: "/configuracoes/fabricante",
         },
         {
-            name: "Admnistração",
+            name: "Administração",
             url: "/configuracoes/admnistracao",
         },
         {

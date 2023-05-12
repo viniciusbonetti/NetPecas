@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import axios from "axios";
 import { SweetAlertsControllerComponent } from "src/app/sweet-alerts-controller/sweet-alerts-controller.component";
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: "app-controller",
@@ -9,12 +10,8 @@ import { SweetAlertsControllerComponent } from "src/app/sweet-alerts-controller/
 })
 export class ControllerComponent extends SweetAlertsControllerComponent {
     public baseUrl = "https://dornez.vps-kinghost.net:81/api";
-    // public headers = { Authorization: this.getToken, "Content-Type": "application/json" };
-    // public setToken = { headers: this.headers };
-    // public setToken = { headers: this.headers };
     headers: object = {};
     setToken: object = {};
-
 
     public paths = {
         register: "/register",

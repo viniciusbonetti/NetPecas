@@ -13,15 +13,17 @@
                                   <span cInputGroupText>
                                       <svg cIcon name="cilUser"></svg>
                                   </span>
-                                  <input autoComplete="username" cFormControl placeholder="Usuario" formControlName="nome_usuario" [valid]="manualValidation" required />
-                                  <c-form-feedback [valid]="false">Usuário é obrigatório!</c-form-feedback>
+                                  <input autoComplete="username" cFormControl placeholder="Usuario" formControlName="nome_usuario" [valid]="this.formLogin.controls['nome_usuario'].errors?.['valid']" />
+                                  <!-- <c-form-feedback [valid]="false">Usuário é obrigatório!</c-form-feedback> -->
+                                  <c-form-feedback [valid]="this.formLogin.controls['nome_usuario'].valid"> {{ this.formLogin.controls['nome_usuario'].errors?.['erro'] }} </c-form-feedback>
                               </c-input-group>
                               <c-input-group class="mb-4">
                                   <span cInputGroupText>
                                       <svg cIcon name="cilLockLocked"></svg>
                                   </span>
-                                  <input autoComplete="current-password" cFormControl placeholder="Senha" formControlName="senha_usuario" type="password" [valid]="manualValidation" required />
-                                  <c-form-feedback [valid]="false">Senha é obrigatória!</c-form-feedback>
+                                  <input autoComplete="current-password" cFormControl placeholder="Senha" formControlName="senha_usuario" type="password" [valid]="this.formLogin.controls['senha_usuario'].errors?.['valid']" />
+                                  <!-- <c-form-feedback [valid]="false">Senha é obrigatória!</c-form-feedback> -->
+                                  <c-form-feedback [valid]="this.formLogin.controls['senha_usuario'].valid"> {{ this.formLogin.controls['senha_usuario'].errors?.['erro'] }} </c-form-feedback>
                               </c-input-group>
                               <c-row>
                                   <c-col xs="6">
@@ -211,3 +213,30 @@
       </c-row>
   </c-container>
 </div>
+
+<c-toaster [placement]="posicaoToast" class="p-3" position="fixed">
+    <c-toast
+      (timer)="onTimerChange($event)"
+      (visibleChange)="onVisibleChange($event)"
+      [visible]="visivelToast"
+      [delay]="3000"
+      color="{{ corToast }}">
+      <c-toast-header *ngIf="tituloToast">
+        <h5 class="{{ corTextoToast }}">
+            <strong>
+                {{ tituloToast }}
+            </strong>
+        </h5>
+      </c-toast-header>
+      <c-toast-body>
+        <p class="{{ corTextoToast }}, text-center" style="font-size: 1rem;">
+             <strong>
+                {{ mensagemToast }}
+            </strong>
+        </p>
+        <!-- <c-progress thin>
+          <c-progress-bar [value]="barraPorcentagemToast"></c-progress-bar>
+        </c-progress> -->
+      </c-toast-body>
+    </c-toast>
+  </c-toaster>

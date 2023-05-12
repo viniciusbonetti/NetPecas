@@ -1,191 +1,224 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder} from "@angular/forms";
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ControllerComponent } from "src/app/controller/controller/controller.component";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: "app-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent extends ControllerComponent implements OnInit {
-  // forms
-  formLogin!: FormGroup;
-  formControlsLogin!: string[];
-  formPesquisaRapida!: FormGroup;
-  formControlsPesquisaRapida!: string[];
-  formRecuperarSenha!: FormGroup;
-  formControlsRecuperarSenha!: string[];
-  formSolicitarAcesso: object = {};
+    // titulo pagina
+    // forms
+    formLogin!: FormGroup;
+    formControlsLogin!: string[];
+    formPesquisaRapida!: FormGroup;
+    formControlsPesquisaRapida!: string[];
+    formRecuperarSenha!: FormGroup;
+    formControlsRecuperarSenha!: string[];
+    formSolicitarAcesso: object = {};
+    
+    // listas
+    listaFabricantes: any;
+    listaPecas: any;
+    listaErros:any = [];
+    
+    //booleans
+    consultou: any;
+    manualValidation: any;
+    recuperouSenha: any;
+    solicitouAcesso: any;
+    logado: any;
+    
+    // input custom
+    inputCnpj: string = "";
+    inputRazaoSocial: string = "";
+    inputCidade: string = "";
+    inputEstado: string = "";
+    inputNumeroLojas: string = "";
+    inputNome: string = "";
+    inputTelefone: string = "";
+    inputEmail: string = "";
+    
+    constructor(private formBuilder: FormBuilder, private router: Router) {
+        super();
+        this.createForm();
+        // this.tituloPagina = "Login";
+    }
 
-  // listas
-  listaFabricantes: any;
-  listaPecas: any;
+    async ngOnInit() {
+        this.getListaFabricantes();
+    }
 
-  //booleans
-  consultou: any;
-  manualValidation: any;
-  recuperouSenha: any;
-  solicitouAcesso: any;
-  logado: any;
+    // Geral ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    fechou() {
+        // modal recuperar senha
+        this.recuperouSenha = "";
+        this.formRecuperarSenha.reset();
 
-  // input custom
-  inputCnpj: string = "";
-  inputRazaoSocial: string = "";
-  inputCidade: string = "";
-  inputEstado: string = "";
-  inputNumeroLojas: string = "";
-  inputNome: string = "";
-  inputTelefone: string = "";
-  inputEmail: string = "";
+        // modal solicitar acesso
+        this.consultou = "";
+        this.solicitouAcesso = "";
+        this.formSolicitarAcesso = {};
+        this.limparInputsSolicitarAcesso();
+    }
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
-      super();
-      this.createForm();
-  }
+    createForm() {
+        // form login
+        this.formLogin = this.formBuilder.group(
+            {
+                nome_usuario: [""],
+                senha_usuario: [""],
+            }
+            // { validators: [PasswordValidators.confirmPassword] }
+        );
+        this.formControlsLogin = Object.keys(this.formLogin.controls);
 
-  ngOnInit() {
-      this.getListaFabricantes();
-  }
+        // form pesquisa rapida
+        this.formPesquisaRapida = this.formBuilder.group({
+            fabricante: [""],
+            codigo_peca: [""],
+        });
+        this.formControlsPesquisaRapida = Object.keys(this.formPesquisaRapida.controls);
 
-  // Geral ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  fechou() {
-      // modal recuperar senha
-      this.recuperouSenha = "";
-      this.formRecuperarSenha.reset();
+        // form recuperar senha
+        this.formRecuperarSenha = this.formBuilder.group({
+            nome_usuario: [""],
+            email_usuario: [""],
+        });
+        this.formControlsRecuperarSenha = Object.keys(this.formRecuperarSenha.controls);
+    }
 
-      // modal solicitar acesso
-      this.consultou = "";
-      this.solicitouAcesso = "";
-      this.formSolicitarAcesso = {};
-      this.limparInputsSolicitarAcesso();
-  }
+    // Logar ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async sendLogin() {
+        let resposta = await this.postInfoSemToken(this.paths.login, this.formLogin.value);
+        if (resposta.status === 200) {
+            this.manualValidation = true;
+            console.log("sucesso");
+            console.log(resposta);
+            this.router.navigate(["/dashboard"]);
+            this.logado = true;
+            localStorage.setItem("logado", this.logado);
+            localStorage.setItem("token", resposta.data.data.token);
+        } else {
+            this.formLogin.controls["nome_usuario"].setErrors(null);
 
-  createForm() {
-      // form login
-      this.formLogin = this.formBuilder.group(
-          {
-              nome_usuario: [""],
-              senha_usuario: [""],
-          }
-          // { validators: [PasswordValidators.confirmPassword] }
-      );
-      this.formControlsLogin = Object.keys(this.formLogin.controls);
+            this.manualValidation = false;
+            this.listaErros = resposta.response;
+            console.log(this.listaErros.data);
+            console.log(resposta.response.data.message);
+            
+            
+            if (this.listaErros.status === 401){
+                this.formLogin.controls["nome_usuario"].setErrors({valid: false });
+                this.formLogin.controls["senha_usuario"].setErrors({ erro: this.listaErros.data.data, valid: false });
+                this.mensagemToast = resposta.response.data.message;
 
-      // form pesquisa rapida
-      this.formPesquisaRapida = this.formBuilder.group({
-          fabricante: [""],
-          codigo_peca: [""],
-      });
-      this.formControlsPesquisaRapida = Object.keys(this.formPesquisaRapida.controls);
+            }else if(this.listaErros.status === 400){
+                this.listaErros.data.data.forEach((item:any) => {
+                    switch (item["campo"]) {
+                        case "nome_usuario": {
+                            this.formLogin.controls["nome_usuario"].setErrors({ erro: item["mensagem"], valid: false });
+                            break;
+                        }
+                        case "senha_usuario": {
+                            this.formLogin.controls["senha_usuario"].setErrors({ erro: item["mensagem"], valid: false });
+                            break;
+                        }
+                    }
+                });
+                this.mensagemToast = resposta.response.data.message;
+            }
+            this.logado = false;
+            localStorage.setItem("logado", this.logado);
 
-      // form recuperar senha
-      this.formRecuperarSenha = this.formBuilder.group({
-          nome_usuario: [""],
-          email_usuario: [""],
-      });
-      this.formControlsRecuperarSenha = Object.keys(this.formRecuperarSenha.controls);
-  }
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = "text-black";
+        }
+        this.toggleToast();
+    }
 
-  // Logar ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async sendLogin() {
-      let resposta = await this.postInfoSemToken(this.paths.login, this.formLogin.value);
-      if (resposta.status === 200) {
-          this.manualValidation = true;
-          console.log("sucesso");
-          console.log(resposta);
-          this.router.navigate(["/dashboard"]);
-          this.logado = true;
-          localStorage.setItem("logado", this.logado);            
-          localStorage.setItem("token", resposta.data.data.token);
-      } else {
-          this.manualValidation = false;
-          console.log("falhou");
-          console.log(resposta.response.data);
-          this.logado = false;
-          localStorage.setItem("logado", this.logado);
-      }
-  }
+    // Recuperar senha ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async recuperarSenha() {
+        let resposta = await this.postInfoSemToken(this.paths.recuperarSenha, this.formRecuperarSenha.value);
 
-  // Recuperar senha ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async recuperarSenha() {
-      let resposta = await this.postInfoSemToken(this.paths.recuperarSenha, this.formRecuperarSenha.value);
+        if (resposta.status === 200) {
+            this.recuperouSenha = true;
+        } else {
+            this.recuperouSenha = false;
+        }
+    }
 
-      if (resposta.status === 200) {
-          this.recuperouSenha = true;
-      } else {
-          this.recuperouSenha = false;
-      }
-  }
+    // Solicitar Acesso ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async consultarCnpj() {
+        let objCnpj = { cnpj: this.inputCnpj };
+        let resposta = await this.postInfoSemToken(this.paths.consultaCnpj, objCnpj);
+        // console.log(resposta.data.data);
+        console.log("Razao social");
+        console.log(resposta.data.data.razao_social);
+        this.inputRazaoSocial = resposta.data.data.razao_social;
 
-  // Solicitar Acesso ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async consultarCnpj() {
-      let objCnpj = { cnpj: this.inputCnpj };
-      let resposta = await this.postInfoSemToken(this.paths.consultaCnpj, objCnpj);
-      // console.log(resposta.data.data);
-      console.log("Razao social");
-      console.log(resposta.data.data.razao_social);
-      this.inputRazaoSocial = resposta.data.data.razao_social;
+        console.log("Cidade");
+        console.log(resposta.data.data.estabelecimento.cidade.nome);
+        this.inputCidade = resposta.data.data.estabelecimento.cidade.nome;
 
-      console.log("Cidade");
-      console.log(resposta.data.data.estabelecimento.cidade.nome);
-      this.inputCidade = resposta.data.data.estabelecimento.cidade.nome;
+        console.log("Estado");
+        console.log(resposta.data.data.estabelecimento.estado.nome);
+        this.inputEstado = resposta.data.data.estabelecimento.estado.nome;
 
-      console.log("Estado");
-      console.log(resposta.data.data.estabelecimento.estado.nome);
-      this.inputEstado = resposta.data.data.estabelecimento.estado.nome;
+        this.consultou = true;
+    }
 
-      this.consultou = true;
-  }
+    customFormSolicitacao() {
+        this.formSolicitarAcesso = {
+            // loja
+            cnpj: this.inputCnpj,
+            razao_social: this.inputRazaoSocial,
+            cidade: this.inputCidade,
+            uf: this.inputEstado,
+            qtde_lojas: this.inputNumeroLojas,
+            // contato
+            nome_responsavel: this.inputNome,
+            telefone_contato: this.inputTelefone,
+            email_responsavel: this.inputEmail,
+        };
+    }
 
-  customFormSolicitacao() {
-      this.formSolicitarAcesso = {
-          // loja
-          cnpj: this.inputCnpj,
-          razao_social: this.inputRazaoSocial,
-          cidade: this.inputCidade,
-          uf: this.inputEstado,
-          qtde_lojas: this.inputNumeroLojas,
-          // contato
-          nome_responsavel: this.inputNome,
-          telefone_contato: this.inputTelefone,
-          email_responsavel: this.inputEmail,
-      };
-  }
+    async enviarSolicitacao() {
+        this.customFormSolicitacao();
+        console.log(this.formSolicitarAcesso);
 
-  async enviarSolicitacao() {
-      this.customFormSolicitacao();
-      console.log(this.formSolicitarAcesso);
+        let resposta = await this.postInfoSemToken(this.paths.solicitacaoAcesso, this.formSolicitarAcesso);
+        if (resposta.status === 200) {
+            this.solicitouAcesso = true;
+        } else {
+            this.solicitouAcesso = false;
+        }
+    }
 
-      let resposta = await this.postInfoSemToken(this.paths.solicitacaoAcesso, this.formSolicitarAcesso);
-      if (resposta.status === 200) {
-          this.solicitouAcesso = true;
-      } else {
-          this.solicitouAcesso = false;
-      }
-  }
+    limparInputsSolicitarAcesso() {
+        this.inputCnpj = "";
+        this.inputRazaoSocial = "";
+        this.inputCidade = "";
+        this.inputEstado = "";
+        this.inputNumeroLojas = "";
+        this.inputNome = "";
+        this.inputTelefone = "";
+        this.inputEmail = "";
+    }
 
-  limparInputsSolicitarAcesso() {
-      this.inputCnpj = "";
-      this.inputRazaoSocial = "";
-      this.inputCidade = "";
-      this.inputEstado = "";
-      this.inputNumeroLojas = "";
-      this.inputNome = "";
-      this.inputTelefone = "";
-      this.inputEmail = "";
-  }
+    // Pesquisa rapida ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async getListaFabricantes() {
+        let resposta = await this.postInfoSemToken(this.paths.listaFabricante);
+        this.listaFabricantes = resposta.data.data;
+    }
 
-  // Pesquisa rapida ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  async getListaFabricantes() {
-      let resposta = await this.postInfoSemToken(this.paths.listaFabricante);
-      this.listaFabricantes = resposta.data.data;
-  }
-
-  async consultarPecas() {
-      let resposta = await this.postInfoSemToken(this.paths.consulta, this.formPesquisaRapida.value);
-      this.listaPecas = resposta.data.data;
-      console.log(this.listaPecas);
-      
-  }
+    async consultarPecas() {
+        let resposta = await this.postInfoSemToken(this.paths.consulta, this.formPesquisaRapida.value);
+        this.listaPecas = resposta.data.data;
+        console.log(this.listaPecas);
+    }
 }
