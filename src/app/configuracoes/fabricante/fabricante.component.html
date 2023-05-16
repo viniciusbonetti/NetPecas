@@ -49,7 +49,8 @@
                             </c-form-check>
                         </ng-container>
                         <ng-container *ngSwitchCase="'acoes'" class="py-2">
-                            <c-col xs-6 class="d-flex justify-content-center">
+                            <c-col xs-6 class="d-flex justify-content-center align-items-center">
+                                <button style="background: none; border: none" [cModalToggle]="modalResumoFabricante.id" (click)="resumoFabricante(item)"><i class="fa-regular fa-magnifying-glass-plus text-secondary" style="font-size: 1.5rem"></i></button>
                                 <button style="background: none; border: none" (click)="editar(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
                                 <button style="background: none; border: none" (click)="deletarFabricante(item)"><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
                             </c-col>
@@ -63,6 +64,65 @@
         </c-smart-table>
     </c-card-body>
 </c-card>
+
+<c-modal #modalResumoFabricante id="modalResumoFabricante" alignment="center" size="xl">
+    <c-modal-header>
+        <div class="row col-12">
+            <h5 cModalTitle class="col-6">Fabricante: {{ dadosFabricante?.nome_fabricante }} </h5>
+            <h5 cModalTitle class="col-6">Código: {{ dadosFabricante?.codigo_fabricante }} </h5>
+
+        </div>
+        <button [cModalToggle]="modalResumoFabricante.id" cButtonClose></button>
+    </c-modal-header>
+
+    <c-modal-body>
+        <div class="d-flex align-items-center">
+            <p cInputGroupText class="col-2 mb-1"> Tipo </p>
+            <p class="mb-1">&nbsp; {{ dadosFabricante?.tipo_fabricante }} </p>
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="input-group-text col-2" id="label-data_ultima_carga">Última carga</span>
+            <p class="mb-1">&nbsp; {{ dadosFabricante?.data_ultima_carga }} </p>
+        </div>
+
+            <c-smart-table
+                #smartTable="cSmartTable"
+                activePage="1"
+                [columnFilter]="true"
+                [columnSorter]="true"
+                [columns]="colunasModalResumoFabricante"
+                [itemsPerPageSelect]="true"
+                pagination
+                [itemsPerPageLabel]="'Itens por pagina:'"
+                [itemsPerPage]="10"
+                [items]="listaModalResumoFabricante"
+                [sorterValue]="{ column: 'name', state: 'asc' }"
+                [tableBodyProps]="{align: 'middle'}"
+                header
+                [tableProps]="{ hover: true, responsive: true }"
+                [noItemsLabel]="'Nenhum fabriante encontrado'"
+                class="text-center minha-tabela-bunitinha"
+            >
+            <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+                <td>
+                    <ng-container [ngSwitch]="columnName">
+                        <ng-container *ngSwitchCase="'status_negocio'">
+                            <div>
+                                <c-form-check class="d-flex justify-content-center">
+                                    <input cFormCheckInput id="status_negocio" type="checkbox" disabled [checked]="item.status_negocio" />
+                                </c-form-check>
+                            </div>
+                        </ng-container>
+        
+                        <ng-container *ngSwitchDefault>
+                            {{tdContent}}
+                        </ng-container>
+                    </ng-container>
+                </td>
+            </ng-template>
+        </c-smart-table>
+    </c-modal-body>
+</c-modal>
 
 <div *ngIf="novoCadastro">
     <c-card>

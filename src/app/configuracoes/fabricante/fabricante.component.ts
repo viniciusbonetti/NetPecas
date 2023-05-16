@@ -17,6 +17,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     // listas
     listaFabricantes: IItem[];
     listaNegocio: IItem[];
+    listaModalResumoFabricante: IItem[];
     listaErros = [];
 
     // booleans
@@ -30,6 +31,9 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     idFabricante: string = "";
     codigoFabricante: string = "";
     idNegocio: string = "";
+    nomeFabricanteModal: string ='';
+    codigoFabricanteModal: string ='';
+    dadosFabricante: any;
 
     constructor(private formBuilder: FormBuilder) {
         super();
@@ -313,6 +317,18 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         }
     }
 
+    // Modal Resumo Frabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async resumoFabricante(item:any){
+        this.dadosFabricante = item;
+        console.log(this.dadosFabricante);
+
+        let resposta = await this.postInfo(this.paths.fabricanteNegocio, { codigo_fabricante: item.codigo_fabricante });
+        
+        this.listaModalResumoFabricante = resposta.data.data
+        // console.log(this.listaModalResumoFabricante);
+        
+    }
+
     // Tabelas /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     colunasFabricante: (IColumn | string)[] = [
@@ -369,6 +385,30 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             _style: { width: "10%" },
             filter: false,
             sorter: false,
+        },
+    ];
+
+    colunasModalResumoFabricante:(IColumn | string)[] = [
+        {
+            key: "codigo_negocio",
+            label: "Código do Negocio",
+            _style: { width: "15%" },
+        },
+        {
+            key: "descricao_negocio",
+            label: "Descrição",
+            _style: { width: "40%" },
+        },
+        {
+            key: "tipo_negocio",
+            label: "Tipo",
+            _style: { width: "10%" },
+        },
+        {
+            key: "status_negocio",
+            label: "Status",
+            _style: { width: "10%" },
+            filter: false,
         },
     ];
 }
