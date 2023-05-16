@@ -240,12 +240,7 @@
                             <td>
                                 <ng-container [ngSwitch]="columnName">
                                     <ng-container *ngSwitchCase="'codigo_negocio'">
-                                        <div *ngIf="!item.editarItemNegocio">{{ item.codigo_negocio }}</div>
-                                        <div *ngIf="item.editarItemNegocio">
-                                            <c-input-group>
-                                                <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negocio" cFormControl formControlName="codigo_negocio" placeholder="Código" maxlength="4"/>
-                                            </c-input-group>
-                                        </div>
+                                        <div >{{ item.codigo_negocio }}</div>
                                     </ng-container>
 
                                     <ng-container *ngSwitchCase="'descricao_negocio'">

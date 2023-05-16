@@ -374,6 +374,11 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             _style: { width: "40%" },
         },
         {
+            key: "tipo_negocio",
+            label: "Tipo",
+            _style: { width: "10%" },
+        },
+        {
             key: "status_negocio",
             label: "Status",
             _style: { width: "10%" },
