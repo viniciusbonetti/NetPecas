@@ -24,6 +24,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     cadastrarNegocio: boolean = false;
     editarItemNegocio: boolean = false;
     manualValidation: any;
+    teste: boolean= false;
 
     // Ids
     idFabricante: string = "";
@@ -48,7 +49,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
                 nome_fabricante: [""],
                 tipo_fabricante: [""],
                 data_ultima_carga: [""],
-                status_fabricante: [""],
+                status_fabricante: ["",],
             }
             // { validators: [PasswordValidators.confirmPassword] }
         );
@@ -84,7 +85,7 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     }
 
     voltar() {
-        this.manualValidation = ''
+        this.manualValidation = "";
         this.novoCadastro = false;
         this.cadastrarNegocio = false;
         this.listaNegocio = [];
@@ -115,6 +116,8 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     // Cadastrar Fabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     cadastrar() {
         this.novoCadastro = true;
+        this.formCadastrarFabricante.controls["codigo_fabricante"].enable();
+        this.formCadastrarFabricante.controls["tipo_fabricante"].enable();
     }
 
     async sendNovoFabricante() {
@@ -122,17 +125,22 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         if (resposta.status === 200) {
             this.manualValidation = true;
             this.cadastrarNegocio = true;
+            this.formCadastrarFabricante.controls["codigo_fabricante"].disable();
+            this.formCadastrarFabricante.controls["tipo_fabricante"].disable();
             this.formCadastrarFabricante.controls["data_ultima_carga"].enable();
             this.formCadastrarNegocio.enable();
+            this.codigoFabricante = this.formCadastrarFabricante.value.codigo_fabricante;
+            this.idFabricante = resposta.data.data.id;
+            this.teste = true
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
             this.corTextoToast = "text-black";
-            this.mensagemToast = "Novo fabricante cadastrado!";
+            this.mensagemToast = "Novo fabricante cadastrado!";            
         } else {
             this.formCadastrarFabricante.controls["codigo_fabricante"].setErrors(null);
             // console.log(this.formCadastrarFabricante.controls);
-            
+
             this.listaErros = resposta.response.data.data;
             this.manualValidation = false;
 
@@ -151,13 +159,17 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
                         this.formCadastrarFabricante.controls["tipo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
                         break;
                     }
+                    case "data_ultima_carga": {
+                        this.formCadastrarFabricante.controls["data_ultima_carga"].setErrors({ erro: item["mensagem"], valid: false });
+                        break;
+                    }
                 }
             });
 
             // console.log(this.formCadastrarFabricante.controls['tipo_fabricante']);
             // console.log(this.formCadastrarFabricante.controls['nome_fabricante']);
             // console.log(this.formCadastrarFabricante.controls['codigo_fabricante'].errors);
-            
+
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
@@ -168,15 +180,11 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     }
 
     // Editar Fabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async getListaNegocio() {
-        let resposta = await this.postInfo(this.paths.fabricanteNegocio, { codigo_fabricante: this.codigoFabricante });
-        console.log("Negocio", resposta.data.data);
-        this.listaNegocio = resposta.data.data;
-    }
-
     async editar(item: any) {
         this.novoCadastro = true;
         this.cadastrarNegocio = true;
+        this.formCadastrarFabricante.controls["codigo_fabricante"].disable();
+        this.formCadastrarFabricante.controls["tipo_fabricante"].disable();
         this.formCadastrarFabricante.controls["data_ultima_carga"].enable();
         this.formCadastrarNegocio.enable();
         this.formCadastrarFabricante.setValue({
@@ -189,10 +197,12 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
 
         this.idFabricante = item.id;
         this.codigoFabricante = item.codigo_fabricante;
-        await this.getListaNegocio();
+        this.getListaNegocio()
     }
 
-    async sendEditarFabricante() {
+    async sendEditarFabricante() {        
+        this.formCadastrarFabricante.controls["codigo_fabricante"].enable();
+        this.formCadastrarFabricante.controls["tipo_fabricante"].enable();
         const path = this.paths.fabricante + `/${this.idFabricante}`;
         let resposta = await this.putInfo(path, this.formCadastrarFabricante.value);
         if (resposta.status === 200) {
@@ -209,6 +219,8 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.corTextoToast = "text-black";
             this.mensagemToast = "Verifique os dados cadastrados.";
         }
+        this.formCadastrarFabricante.controls["codigo_fabricante"].disable();
+        this.formCadastrarFabricante.controls["tipo_fabricante"].disable();
         this.toggleToast();
     }
 
@@ -226,11 +238,19 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     }
 
     // Cadastrar Negócio ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async getListaNegocio() {
+        this.formCadastrarFabricante.controls["codigo_fabricante"].enable();
+        let resposta = await this.postInfo(this.paths.fabricanteNegocio, { codigo_fabricante: this.formCadastrarFabricante.controls["codigo_fabricante"].value});
+        this.formCadastrarFabricante.controls["codigo_fabricante"].disable();
+        this.listaNegocio = resposta.data.data;
+    }
+
     async sendNovoNegocio() {
-        this.formCadastrarNegocio.value.codigo_fabricante = this.codigoFabricante;
+        this.formCadastrarFabricante.controls["codigo_fabricante"].enable();
+        this.formCadastrarNegocio.value.codigo_fabricante = this.formCadastrarFabricante.controls["codigo_fabricante"].value;
         let resposta = await this.postInfo(this.paths.negocio, this.formCadastrarNegocio.value);
+        await this.getListaNegocio();
         if (resposta.status === 200) {
-            this.cadastrarNegocio = true;
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
@@ -243,8 +263,8 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.corTextoToast = "text-black";
             this.mensagemToast = "Verifique os dados cadastrados.";
         }
+        this.formCadastrarFabricante.controls["codigo_fabricante"].disable();
         this.toggleToast();
-        this.getListaNegocio();
     }
 
     // Editar Negocio //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

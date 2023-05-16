@@ -78,14 +78,16 @@
             <form cForm [formGroup]="formCadastrarFabricante" noValidate>
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span>
-                    <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.valid"/>
+                    <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.valid" maxlength="4"/>
                     <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
+
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-nome_fabricante">Nome</span>
                     <input id="nome_fabricante" name="nome_fabricante" type="text" aria-label="Nome do fabricante" cFormControl formControlName="nome_fabricante" [valid]="this.formCadastrarFabricante.controls['nome_fabricante'].errors?.valid"/>
                     <c-form-feedback [valid]="this.formCadastrarFabricante.controls['nome_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['nome_fabricante'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
+
                 <c-input-group class="mb-1">
                     <label cInputGroupText for="selectTiposFabricantes" class="col-2"> Tipo </label>
                     <select cSelect id="selectTiposFabricantes" formControlName="tipo_fabricante" [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.valid">
@@ -95,10 +97,13 @@
                     </select>
                     <c-form-feedback [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
+
                 <c-input-group class="col-6 mb-1">
                     <span class="input-group-text col-2" id="label-data_ultima_carga">Última carga</span>
-                    <c-date-picker id="data_ultima_carga" name="data_ultima_carga" closeOnSelect formControlName="data_ultima_carga" placeholder="Selecione a data"></c-date-picker>
+                    <c-date-picker id="data_ultima_carga" name="data_ultima_carga" closeOnSelect formControlName="data_ultima_carga" placeholder="Selecione a data" [valid]="this.formCadastrarFabricante.controls['data_ultima_carga'].errors?.valid"></c-date-picker>
+                    <c-form-feedback [valid]="this.formCadastrarFabricante.controls['data_ultima_carga'].valid"> {{ this.formCadastrarFabricante.controls['data_ultima_carga'].errors?.erro }} </c-form-feedback>
                 </c-input-group>
+
                 <c-input-group class="mb-1">
                     <span class="input-group-text col-2" id="label-status_fabricante">
                         Ativo:
@@ -126,7 +131,7 @@
                 <form cRow [gutter]="1" [formGroup]="formCadastrarNegocio" class="align-items-center">
                     <c-input-group>
                         <span class="input-group-text col-3" id="label-codigo_negocio">Código do Negócio</span>
-                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" />
+                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" maxlength="4"/>
                     </c-input-group>
                     <c-input-group>
                         <span class="input-group-text col-3" id="label-descricao_negocio">Descrição</span>
@@ -178,7 +183,7 @@
                                         <div *ngIf="!item.editarItemNegocio">{{ item.codigo_negocio }}</div>
                                         <div *ngIf="item.editarItemNegocio">
                                             <c-input-group>
-                                                <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negocio" cFormControl formControlName="codigo_negocio" placeholder="Código" />
+                                                <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negocio" cFormControl formControlName="codigo_negocio" placeholder="Código" maxlength="4"/>
                                             </c-input-group>
                                         </div>
                                     </ng-container>
