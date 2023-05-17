@@ -35,13 +35,19 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        title: 'Netpeças - Dashboard',
+        title: 'Dashboard - Netpeças',
         loadChildren: () =>
         import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
       },
       {
+        path: 'produtos',
+        title: 'Produtos - Netpeças',
+        loadChildren: () =>
+        import('./produtos/produtos.module').then((m) => m.ProdutosModule)
+      },
+      {
         path: 'configuracoes',
-        title: 'Netpeças - Configurações',
+        title: 'Configurações - Netpeças',
         loadChildren: () =>
         import('./configuracoes/configuracoes.module').then((m) => m.ConfiguracoesModule)
       },
@@ -119,7 +125,7 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    title: 'Netpeças - Login',
+    title: 'Login - Netpeças',
     data: {
       title: 'Login Page'
     }
