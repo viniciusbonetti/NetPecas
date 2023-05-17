@@ -24,6 +24,7 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         fabricante: "/fabricante",
         fabricanteNegocio: "/fabricanteNegocio",
         negocio: "/negocio",
+        listaPecaFabricante: "/listaPecaFabricante"
     };
 
     public getToken() {
@@ -79,7 +80,6 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
     public async putInfo(path: string, form: object) {
         let token = await this.getToken();
         let urlPut = this.baseUrl + path;
-        console.log(urlPut);
 
         let resposta = await axios.put(urlPut, form, token).catch(function (response) {
             return response;

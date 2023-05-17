@@ -4,36 +4,69 @@
     </c-card-header>
 
     <c-card-body>
+        <form cForm [formGroup]="formFiltrarPecas" noValidate>
         <c-row>
-            <c-col md="5">
-                <c-input-group class="mb-1">
-                    <!-- <label cInputGroupText for="selectCodigoFabricante" class="col-2"> Tipo </label> -->
-                    <select cSelect id="selectCodigoFabricante">
-                        <option disabled selected value="">Selecione o código do fabricante</option>
-                        <option *ngFor="let item of listaFabricantes" value="{{ item.codigo_fabricante }}"> {{ item.codigo_fabricante }} </option>
-                    </select>
-                    <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.erro }} </c-form-feedback> -->
-                </c-input-group>
-            </c-col>
+                <c-col md="5">
+                    <div class="mb-1" cFormFloating>
+                        <select cSelect id="selectCodigoFabricante" placeholder="teste" formControlName="codigo_fabricante">
+                            <!-- <option  value=""></option> -->
+                            <option disabled selected value="">Selecione o código do fabricante</option>
+                            <option *ngFor="let item of listaFabricantes" value="{{ item.codigo_fabricante }}"> {{ item.codigo_fabricante }} </option>
+                        </select>
+                        <label cLabel for="selectCodigoFabricante">Código do fabricante: </label>
+                        <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.erro }} </c-form-feedback> -->
+    
+                    </div>
+                </c-col>
+    
+                <c-col md="3">
+                    <div cFormFloating>
+                        <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
+                        <input id="codigo_peca" name="codigo_peca" type="Text" aria-label="Codigo da peça" cFormControl placeholder="Código da peça" formControlName="codigo_peca"/>
+                        <label cLabel for="codigo_peca">Código da peça:</label>
+                        <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
+                    </div>
+                </c-col>
+    
+                <c-col md="4">
+                    <div cFormFloating="">
+                        <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
+                        <input id="descricao_peca" name="descricao_peca" type="Text" aria-label="Descrição da peça" cFormControl placeholder="Descrição da peça" formControlName="descricao_peca"/>
+                        <label cLabel for="descricao_peca">Descrição da peça:</label>
+                        <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
+                    </div>
+                </c-col>
+    
+                <c-col>
+                    <button cButton class="mt-2 text-white" color="secondary" type="submit" (click)="getListaPecas()"><i class="fa-regular fa-magnifying-glass"></i>&nbsp;Pesquisar</button>
+                </c-col>
+            </c-row>
+        </form>
 
-            <c-col md="3">
-                <c-input-group>
-                    <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
-                    <input id="codigo_peca" name="codigo_peca" type="Text" aria-label="Codigo da peça" cFormControl placeholder="Código da peça"/>
-                    <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
-                </c-input-group>
-            </c-col>
-
-            <c-col md="4">
-                <c-input-group>
-                    <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
-                    <input id="descricao_peca" name="descricao_peca" type="Text" aria-label="Descrição da peça" cFormControl placeholder="Descrição da peça"/>
-                    <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
-                </c-input-group>
-            </c-col>
-            <c-col>
-                <button cButton color="secondary" class="text-white"><i class="fa-regular fa-magnifying-glass"></i>&nbsp;Pesquisar</button>
-            </c-col>
+        <c-row>
+            <c-smart-table
+                #smartTable="cSmartTable"
+                activePage="1"
+                cleaner
+                [columnFilter]="true"
+                [columnSorter]="true"
+                [columns]="colunasPecas"
+                [itemsPerPageSelect]="true"
+                pagination
+                [itemsPerPageLabel]="'Itens por pagina:'"
+                [itemsPerPage]="10"
+                [items]="listaPecas"
+                [sorterValue]="{ column: 'name', state: 'asc' }"
+                [tableBodyProps]="{align: 'middle'}"
+                header
+                [tableFilter]="true"
+                [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
+                [tableFilterPlaceholder]="''"
+                [tableProps]="{ hover: true, responsive: true }"
+                [noItemsLabel]="'Nenhuma peça encontrada'"
+                class="text-center"
+            >
+            </c-smart-table>
         </c-row>
     </c-card-body>
 </c-card>
