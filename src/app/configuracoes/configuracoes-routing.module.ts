@@ -5,6 +5,7 @@ import { FabricanteComponent } from './fabricante/fabricante.component';
 const routes: Routes = [
   {
     path: 'fabricante',
+    title: 'Fabricante - NetPeças',
     component: FabricanteComponent,
     data: {
       title: 'Fabricante'
