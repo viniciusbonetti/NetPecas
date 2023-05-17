@@ -307,14 +307,14 @@
       [delay]="3000"
       color="{{ corToast }}">
       <c-toast-header *ngIf="tituloToast">
-        <h5 class="{{ corTextoToast }}">
+        <h5 class="{{ corTextoToast }}, mb-0 w-100" style="text-align: center;">
             <strong>
                 {{ tituloToast }}
             </strong>
         </h5>
       </c-toast-header>
       <c-toast-body>
-        <p class="{{ corTextoToast }}, text-center, mb-0" style="font-size: 1rem;">
+        <p class="{{ corTextoToast }}, text-center, mb-0" style="font-size: 1rem; text-align: center;">
              <strong>
                 {{ mensagemToast }}
             </strong>
