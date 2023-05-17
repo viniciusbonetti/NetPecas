@@ -1,1 +1,39 @@
-<p>produto works!</p>
+<c-card>
+    <c-card-header>
+        <h1>Produto</h1>
+    </c-card-header>
+
+    <c-card-body>
+        <c-row>
+            <c-col md="5">
+                <c-input-group class="mb-1">
+                    <!-- <label cInputGroupText for="selectCodigoFabricante" class="col-2"> Tipo </label> -->
+                    <select cSelect id="selectCodigoFabricante">
+                        <option disabled selected value="">Selecione o código do fabricante</option>
+                        <option *ngFor="let item of listaFabricantes" value="{{ item.codigo_fabricante }}"> {{ item.codigo_fabricante }} </option>
+                    </select>
+                    <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.erro }} </c-form-feedback> -->
+                </c-input-group>
+            </c-col>
+
+            <c-col md="3">
+                <c-input-group>
+                    <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
+                    <input id="codigo_peca" name="codigo_peca" type="Text" aria-label="Codigo da peça" cFormControl placeholder="Código da peça"/>
+                    <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
+                </c-input-group>
+            </c-col>
+
+            <c-col md="4">
+                <c-input-group>
+                    <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
+                    <input id="descricao_peca" name="descricao_peca" type="Text" aria-label="Descrição da peça" cFormControl placeholder="Descrição da peça"/>
+                    <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
+                </c-input-group>
+            </c-col>
+            <c-col>
+                <button cButton color="secondary" class="text-white"><i class="fa-regular fa-magnifying-glass"></i>&nbsp;Pesquisar</button>
+            </c-col>
+        </c-row>
+    </c-card-body>
+</c-card>
