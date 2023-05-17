@@ -20,7 +20,6 @@ export class AppComponent extends ControllerComponent implements OnInit {
     private iconSetService: IconSetService
   ) {
     super();
-    console.log(router);
     
     // titleService.setTitle('NetPeças - ' +);
     // iconSet singleton

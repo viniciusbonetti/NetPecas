@@ -25,7 +25,6 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     cadastrarNegocio: boolean = false;
     editarItemNegocio: boolean = false;
     manualValidation: any;
-    teste: boolean= false;
 
     // Ids
     idFabricante: string = "";
@@ -135,44 +134,16 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.formCadastrarNegocio.enable();
             this.codigoFabricante = this.formCadastrarFabricante.value.codigo_fabricante;
             this.idFabricante = resposta.data.data.id;
-            this.teste = true
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
             this.corTextoToast = "text-black";
             this.mensagemToast = "Novo fabricante cadastrado!";            
         } else {
-            this.formCadastrarFabricante.controls["codigo_fabricante"].setErrors(null);
-            // console.log(this.formCadastrarFabricante.controls);
-
             this.listaErros = resposta.response.data.data;
             this.manualValidation = false;
 
-            this.listaErros.forEach((item) => {
-                switch (item["campo"]) {
-                    case "codigo_fabricante": {
-                        this.formCadastrarFabricante.controls["codigo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
-                        break;
-                    }
-                    case "nome_fabricante": {
-                        this.formCadastrarFabricante.controls["nome_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
-                        break;
-                    }
-
-                    case "tipo_fabricante": {
-                        this.formCadastrarFabricante.controls["tipo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
-                        break;
-                    }
-                    case "data_ultima_carga": {
-                        this.formCadastrarFabricante.controls["data_ultima_carga"].setErrors({ erro: item["mensagem"], valid: false });
-                        break;
-                    }
-                }
-            });
-
-            // console.log(this.formCadastrarFabricante.controls['tipo_fabricante']);
-            // console.log(this.formCadastrarFabricante.controls['nome_fabricante']);
-            // console.log(this.formCadastrarFabricante.controls['codigo_fabricante'].errors);
+            this.setErros();
 
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
@@ -261,6 +232,11 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             this.corTextoToast = "text-black";
             this.mensagemToast = "Novo negócio cadastrado!";
         } else {
+            this.listaErros = resposta.response.data.data;
+            this.manualValidation = false;
+
+            this.setErros();
+
             this.corToast = "danger";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
@@ -320,13 +296,49 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     // Modal Resumo Frabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async resumoFabricante(item:any){
         this.dadosFabricante = item;
-        console.log(this.dadosFabricante);
+        // console.log(this.dadosFabricante);
 
         let resposta = await this.postInfo(this.paths.fabricanteNegocio, { codigo_fabricante: item.codigo_fabricante });
         
         this.listaModalResumoFabricante = resposta.data.data
         // console.log(this.listaModalResumoFabricante);
         
+    }
+
+    setErros(){
+        this.listaErros.forEach((item) => {
+            switch (item["campo"]) {
+                case "codigo_fabricante": {
+                    this.formCadastrarFabricante.controls["codigo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+                case "nome_fabricante": {
+                    this.formCadastrarFabricante.controls["nome_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+
+                case "tipo_fabricante": {
+                    this.formCadastrarFabricante.controls["tipo_fabricante"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+                case "data_ultima_carga": {
+                    this.formCadastrarFabricante.controls["data_ultima_carga"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+                case "codigo_negocio": {
+                    this.formCadastrarNegocio.controls["codigo_negocio"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+                case "descricao_negocio": {
+                    this.formCadastrarNegocio.controls["descricao_negocio"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+                case "tipo_negocio": {
+                    this.formCadastrarNegocio.controls["tipo_negocio"].setErrors({ erro: item["mensagem"], valid: false });
+                    break;
+                }
+            }
+        });
     }
 
     // Tabelas /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

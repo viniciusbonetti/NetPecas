@@ -32,7 +32,7 @@
             [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
             [tableFilterPlaceholder]="''"
             [tableProps]="{ hover: true, responsive: true }"
-            [noItemsLabel]="'Nenhum fabriante encontrado'"
+            [noItemsLabel]="'Nenhum fabricante encontrado'"
             class="text-center minha-tabela-bunitinha"
         >
             <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
@@ -78,12 +78,12 @@
     <c-modal-body>
         <div class="d-flex align-items-center">
             <p cInputGroupText class="col-2 mb-1"> Tipo </p>
-            <p class="mb-1">&nbsp; {{ dadosFabricante?.tipo_fabricante }} </p>
+            <p class="mb-1 col-4">&nbsp; {{ dadosFabricante?.tipo_fabricante }} </p>
+            <span class="input-group-text col-2 mb-1" id="label-data_ultima_carga">Última carga</span>
+            <p class="mb-1 col-4">&nbsp; {{ dadosFabricante?.data_ultima_carga }} </p>
         </div>
-        <div class="d-flex align-items-center">
-            <span class="input-group-text col-2" id="label-data_ultima_carga">Última carga</span>
-            <p class="mb-1">&nbsp; {{ dadosFabricante?.data_ultima_carga }} </p>
-        </div>
+        <!-- <div class="d-flex align-items-center">
+        </div> -->
 
             <c-smart-table
                 #smartTable="cSmartTable"
@@ -100,7 +100,7 @@
                 [tableBodyProps]="{align: 'middle'}"
                 header
                 [tableProps]="{ hover: true, responsive: true }"
-                [noItemsLabel]="'Nenhum fabriante encontrado'"
+                [noItemsLabel]="'Nenhum negócio encontrado'"
                 class="text-center minha-tabela-bunitinha"
             >
             <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
@@ -191,19 +191,22 @@
                 <form cRow [gutter]="1" [formGroup]="formCadastrarNegocio" class="align-items-center">
                     <c-input-group>
                         <span class="input-group-text col-3" id="label-codigo_negocio">Código do Negócio</span>
-                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" maxlength="4"/>
+                        <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do negócio" cFormControl formControlName="codigo_negocio" maxlength="4" [valid]="this.formCadastrarNegocio.controls['codigo_negocio'].errors?.valid"/>
+                        <c-form-feedback [valid]="this.formCadastrarNegocio.controls['codigo_negocio'].valid"> {{ this.formCadastrarNegocio.controls['codigo_negocio'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                     <c-input-group>
                         <span class="input-group-text col-3" id="label-descricao_negocio">Descrição</span>
-                        <input id="descricao_negocio" name="descricao_negocio" type="text" aria-label="Nome do fabricante" cFormControl formControlName="descricao_negocio" />
+                        <input id="descricao_negocio" name="descricao_negocio" type="text" aria-label="Descrição do negócio" cFormControl formControlName="descricao_negocio" [valid]="this.formCadastrarNegocio.controls['descricao_negocio'].errors?.valid"/>
+                        <c-form-feedback [valid]="this.formCadastrarNegocio.controls['descricao_negocio'].valid"> {{ this.formCadastrarNegocio.controls['descricao_negocio'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                     <c-input-group class="mb-3">
                         <label cInputGroupText for="selectTiposNegocio" class="col-3"> Tipo </label>
-                        <select cSelect id="selectTiposNegocio" formControlName="tipo_negocio">
+                        <select cSelect id="selectTiposNegocio" formControlName="tipo_negocio" [valid]="this.formCadastrarNegocio.controls['tipo_negocio'].errors?.valid">
                             <option disabled selected value="">Selecione o tipo do negocio</option>
                             <option value="AG">Agrícola</option>
                             <option value="CT">Construção</option>
                         </select>
+                        <c-form-feedback [valid]="this.formCadastrarNegocio.controls['tipo_negocio'].valid"> {{ this.formCadastrarNegocio.controls['tipo_negocio'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                     <c-col class="d-flex">
                         <button cButton [disabled]="!cadastrarNegocio" style="background: none; border: none; box-shadow: none" (click)="sendNovoNegocio()"><i class="fa-solid fa-square-check text-success" style="font-size: 1.5rem">&nbsp;Confirmar </i></button>
