@@ -348,16 +348,19 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             key: "codigo_fabricante",
             label: "Código",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "nome_fabricante",
             label: "Nome",
             _style: { width: "40%" },
+            filter: false,
         },
         {
             key: "tipo_fabricante",
             label: "Tipo",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "status_fabricante",
@@ -379,16 +382,19 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             key: "codigo_negocio",
             label: "Código do negócio",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "descricao_negocio",
             label: "Descrição",
             _style: { width: "40%" },
+            filter: false,
         },
         {
             key: "tipo_negocio",
             label: "Tipo",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "status_negocio",
@@ -410,16 +416,21 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
             key: "codigo_negocio",
             label: "Código do Negocio",
             _style: { width: "15%" },
+            filter: false,
+
         },
         {
             key: "descricao_negocio",
             label: "Descrição",
             _style: { width: "40%" },
+            filter: false,
+
         },
         {
             key: "tipo_negocio",
             label: "Tipo",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "status_negocio",

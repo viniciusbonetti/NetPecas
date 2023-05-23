@@ -12,7 +12,7 @@
         size="lg"
       ></svg>
     </button>
-    <c-header-nav class="d-none d-lg-flex me-auto">
+    <!-- <c-header-nav class="d-none d-lg-flex me-auto">
       <c-nav-item>
         <a cNavLink routerLink="/dashboard" routerLinkActive="active">
           Dashboard
@@ -26,7 +26,7 @@
           Settings
         </a>
       </c-nav-item>
-    </c-header-nav>
+    </c-header-nav> -->
 
     <c-header-nav class="ms-auto me-4">
       <form [formGroup]="themeSwitch" cForm>
@@ -66,7 +66,7 @@
     </c-header-nav>
 
     <!-- todo: header nav dropdown menus  -->
-    <c-header-nav class="d-none d-lg-flex">
+    <!-- <c-header-nav class="d-none d-lg-flex">
       <ng-container *ngTemplateOutlet="notifyDropdown"></ng-container>
       <ng-container *ngTemplateOutlet="taskDropdown"></ng-container>
       <ng-container *ngTemplateOutlet="messagesDropdown"></ng-container>
@@ -75,7 +75,7 @@
       <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
     </c-header-nav>
 
-    <!--aside toggler-->
+    aside toggler
     <button
       toggle="visible"
       cHeaderToggler
@@ -89,7 +89,7 @@
   <c-container [fluid]="true">
     <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
   </c-container>
-</ng-container>
+</ng-container> -->
 <!--</c-header>-->
 
 <ng-template #userDropdown>

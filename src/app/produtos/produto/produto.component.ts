@@ -55,41 +55,49 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
             key: "codigo_fabricante",
             label: "Fabricante",
             _style: { width: "15%" },
+            filter: false,
         },
         {
             key: "codigo_negocio",
             label: "Negócio",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "codigo_peca",
             label: "Peça",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "data_preco",
             label: "Data preço",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "data_ultima_carga",
             label: "Data ultima carga",
             _style: { width: "15%" },
+            filter: false,
         },
         {
             key: "descricao_peca",
             label: "Descrição",
             _style: { width: "20%" },
+            filter: false,
         },
         {
             key: "perc_ipi",
             label: "% IPI",
             _style: { width: "10%" },
+            filter: false,
         },
         {
             key: "valor_lpp",
             label: "valor",
             _style: { width: "10%" },
+            
         },
     ];
 }

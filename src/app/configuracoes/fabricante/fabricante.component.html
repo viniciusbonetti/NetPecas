@@ -17,7 +17,6 @@
             #smartTable="cSmartTable"
             activePage="1"
             cleaner
-            [columnFilter]="true"
             [columnSorter]="true"
             [columns]="colunasFabricante"
             [itemsPerPageSelect]="true"
@@ -65,11 +64,12 @@
     </c-card-body>
 </c-card>
 
+<!-- Modal resumo fabricante -->
 <c-modal #modalResumoFabricante id="modalResumoFabricante" alignment="center" size="xl">
     <c-modal-header>
         <div class="row col-12">
-            <h5 cModalTitle class="col-6">Fabricante: {{ dadosFabricante?.nome_fabricante }} </h5>
             <h5 cModalTitle class="col-6">Código: {{ dadosFabricante?.codigo_fabricante }} </h5>
+            <h5 cModalTitle class="col-6">Fabricante: {{ dadosFabricante?.nome_fabricante }} </h5>
 
         </div>
         <button [cModalToggle]="modalResumoFabricante.id" cButtonClose></button>
@@ -88,7 +88,6 @@
             <c-smart-table
                 #smartTable="cSmartTable"
                 activePage="1"
-                [columnFilter]="true"
                 [columnSorter]="true"
                 [columns]="colunasModalResumoFabricante"
                 [itemsPerPageSelect]="true"
@@ -100,6 +99,9 @@
                 [tableBodyProps]="{align: 'middle'}"
                 header
                 [tableProps]="{ hover: true, responsive: true }"
+                [tableFilter]="true"
+                [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
+                [tableFilterPlaceholder]="''"
                 [noItemsLabel]="'Nenhum negócio encontrado'"
                 class="text-center minha-tabela-bunitinha"
             >
@@ -221,7 +223,6 @@
                         #smartTable="cSmartTable"
                         activePage="1"
                         cleaner
-                        [columnFilter]="true"
                         [columnSorter]="true"
                         [columns]="colunasNegocio"
                         [itemsPerPageSelect]="true"

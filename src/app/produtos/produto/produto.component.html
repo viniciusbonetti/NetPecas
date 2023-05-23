@@ -10,10 +10,10 @@
                     <div class="mb-1" cFormFloating>
                         <select cSelect id="selectCodigoFabricante" placeholder="teste" formControlName="codigo_fabricante">
                             <!-- <option  value=""></option> -->
-                            <option disabled selected value="">Selecione o código do fabricante</option>
+                            <option disabled selected value="">selecione</option>
                             <option *ngFor="let item of listaFabricantes" value="{{ item.codigo_fabricante }}"> {{ item.codigo_fabricante }} </option>
                         </select>
-                        <label cLabel for="selectCodigoFabricante">Código do fabricante: </label>
+                        <label cLabel for="selectCodigoFabricante">Código: </label>
                         <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['tipo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['tipo_fabricante'].errors?.erro }} </c-form-feedback> -->
     
                     </div>
@@ -23,7 +23,7 @@
                     <div cFormFloating>
                         <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
                         <input id="codigo_peca" name="codigo_peca" type="Text" aria-label="Codigo da peça" cFormControl placeholder="Código da peça" formControlName="codigo_peca"/>
-                        <label cLabel for="codigo_peca">Código da peça:</label>
+                        <label cLabel for="codigo_peca">Peça:</label>
                         <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
                     </div>
                 </c-col>
@@ -32,7 +32,7 @@
                     <div cFormFloating="">
                         <!-- <span class="input-group-text col-2" id="label-codigo_fabricante">Código</span> -->
                         <input id="descricao_peca" name="descricao_peca" type="Text" aria-label="Descrição da peça" cFormControl placeholder="Descrição da peça" formControlName="descricao_peca"/>
-                        <label cLabel for="descricao_peca">Descrição da peça:</label>
+                        <label cLabel for="descricao_peca">Descrição:</label>
                         <!-- <c-form-feedback [valid]="this.formCadastrarFabricante.controls['codigo_fabricante'].valid"> {{ this.formCadastrarFabricante.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback> -->
                     </div>
                 </c-col>
@@ -43,12 +43,11 @@
             </c-row>
         </form>
 
-        <c-row>
+        <c-row class="mt-5">
             <c-smart-table
                 #smartTable="cSmartTable"
                 activePage="1"
                 cleaner
-                [columnFilter]="true"
                 [columnSorter]="true"
                 [columns]="colunasPecas"
                 [itemsPerPageSelect]="true"
