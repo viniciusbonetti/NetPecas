@@ -208,6 +208,17 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         if (this.resultado) {
             const path = this.paths.fabricante + `/${item.id}`;
             let resposta = await this.deleteInfo(path);
+            if (resposta.status !== 200) {                
+                const type = 'failed';
+                this.mensagemTitulo = 'Falhou!'
+                this.mensagemAlerta = 'Verifique as dependencias deste fabricante para poder excluir este registro.'
+                await this.showSwal(type);
+            } else if (resposta.status === 200){
+                const type = 'success-message';
+                this.mensagemTitulo = 'Sucesso!'
+                this.mensagemAlerta = 'O registro foi deletado com sucesso.'
+                await this.showSwal(type);
+            }
             this.getFabricante();
         }
     }
@@ -287,9 +298,18 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         await this.showSwal(type);
         if (this.resultado) {
             let resposta = await this.deleteInfo(this.paths.negocio + `/${item.id}`);
-            if (resposta.status === 200) {
-                this.getListaNegocio();
+            if (resposta.status !== 200) {                
+                const type = 'failed';
+                this.mensagemTitulo = 'Falhou!'
+                this.mensagemAlerta = 'Verifique as dependencias deste negócio para poder excluir este registro.'
+                await this.showSwal(type);
+            } else if (resposta.status === 200){
+                const type = 'success-message';
+                this.mensagemTitulo = 'Sucesso!'
+                this.mensagemAlerta = 'O registro foi deletado com sucesso.'
+                await this.showSwal(type);
             }
+            this.getListaNegocio();
         }
     }
 
@@ -381,13 +401,13 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
         {
             key: "codigo_negocio",
             label: "Código do negócio",
-            _style: { width: "10%" },
+            _style: { width: "15%" },
             filter: false,
         },
         {
             key: "descricao_negocio",
             label: "Descrição",
-            _style: { width: "40%" },
+            _style: { width: "35%" },
             filter: false,
         },
         {

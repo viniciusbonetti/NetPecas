@@ -34,11 +34,11 @@ export class SweetAlertsControllerComponent {
 
       } else if (type == 'success-message') {
           swal.fire({
-              title: "Good job!",
-              text: "You clicked the button!",
+              title: this.mensagemTitulo,
+              text: this.mensagemAlerta,
               buttonsStyling: false,
               customClass:{
-                confirmButton: "btn btn-success",
+                confirmButton: "btn btn-secondary",
               },
               icon: "success"
           });
@@ -85,15 +85,15 @@ export class SweetAlertsControllerComponent {
               buttonsStyling: false
           }).then((result) => {
             if (result.value) {              
-              swal.fire({
-                  title: 'Confirmado',
-                  text: 'Seu registro foi deletado.',
-                  icon: 'success',
-                  customClass:{
-                    confirmButton: "btn btn-success",
-                  },
-                  buttonsStyling: false
-              });
+              // swal.fire({
+              //     title: 'Confirmado',
+              //     text: 'Seu registro foi deletado.',
+              //     icon: 'success',
+              //     customClass:{
+              //       confirmButton: "btn btn-success",
+              //     },
+              //     buttonsStyling: false
+              // });
               this.resultado = result.isConfirmed;
             } else {
               // swal.fire({
@@ -109,6 +109,16 @@ export class SweetAlertsControllerComponent {
             }
           })
 
+      } else if (type == 'failed'){
+        swal.fire({
+          title: this.mensagemTitulo,
+          text: this.mensagemAlerta,
+          icon: 'error',
+          customClass:{
+            confirmButton: "btn btn-secondary",
+          },
+          buttonsStyling: false
+      });
       } else if (type == 'custom-html') {
           swal.fire({
               title: this.mensagemTitulo,

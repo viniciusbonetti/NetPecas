@@ -1,4 +1,4 @@
-<c-card *ngIf="!novoCadastro">
+<c-card *ngIf="!novoCadastro" class="cards">
     <c-card-header>
         <h1>Fabricantes</h1>
     </c-card-header>
@@ -76,11 +76,12 @@
     </c-modal-header>
 
     <c-modal-body>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center mb-5">
             <p cInputGroupText class="col-2 mb-1"> Tipo </p>
-            <p class="mb-1 col-4">&nbsp; {{ dadosFabricante?.tipo_fabricante }} </p>
+            <p class="mb-1 col-4" *ngIf="dadosFabricante?.tipo_fabricante == 'AG'">&nbsp; Agrícola </p>
+            <p class="mb-1 col-4" *ngIf="dadosFabricante?.tipo_fabricante == 'CT'">&nbsp; Construção </p>
             <span class="input-group-text col-2 mb-1" id="label-data_ultima_carga">Última carga</span>
-            <p class="mb-1 col-4">&nbsp; {{ dadosFabricante?.data_ultima_carga }} </p>
+            <p class="mb-1 col-4">&nbsp; {{ dadosFabricante?.data_ultima_carga | date: 'dd/MM/yyyy'}} </p>
         </div>
         <!-- <div class="d-flex align-items-center">
         </div> -->
@@ -239,7 +240,7 @@
                         [tableProps]="{ hover: true, responsive: true }"
                         [noItemsLabel]="'Nenhum negócio encontrado'"
                         class="text-center minha-tabela-bunitinha"
-                    >
+                    >                        
                         <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
                             <td>
                                 <ng-container [ngSwitch]="columnName">
@@ -296,7 +297,6 @@
                 </form>
             </c-row>
         </c-card-body>
-        <c-card-footer></c-card-footer>
     </c-card>
 </div>
 
