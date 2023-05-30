@@ -11,7 +11,10 @@ import { ControllerComponent } from "src/app/controller/controller/controller.co
 export class ProdutoComponent extends ControllerComponent implements OnInit {
     // forms
     formFiltrarPecas!: FormGroup;
+    formCadastrarProduto!: FormGroup;
 
+    // booleans
+    novoCadastro:boolean = false;
     // listas
     listaFabricantes: any;
     listaPecas: IItem[];
@@ -40,13 +43,49 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
             }
             // { validators: [PasswordValidators.confirmPassword] }
         );
+
+        this.formCadastrarProduto = this.formBuilder.group(
+            {
+                codigo_fabricante: [''],
+                codigo_peca: [''],
+                descricao_peca: [''],
+                codigo_negocio: [''],
+                codigo_mpc: [''],
+                valor_lpp: [''],
+                preco_compra: [''],
+                data_preco: [''],
+                classif_fiscal: [''],
+                ex: [''],
+                codigo_origem: [''],
+                perc_ipi: [''],
+                peso: [''],
+                qtde_embalagem: [''],
+                codigo_desconto: [''],
+                desconto_compra: [''],
+                desconto_venda: [''],
+                familia: [''],
+                unidade_medida: [''],
+                data_ultima_carga: [''],
+                chave_peca: [''],
+                imagem_peca: [''],
+                status_peca: [''],
+            }
+            // { validators: [PasswordValidators.confirmPassword] }
+        );
     }
-    // Get lista de peças /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Geral /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async getListaPecas() {
         let resposta = await this.postInfo(this.paths.listaPecaFabricante, this.formFiltrarPecas.value);
         this.listaPecas = resposta.data.data;
         console.log(resposta.data);
-        
+    }
+
+    cadastrar(){
+        this.novoCadastro = true;
+    }
+
+    voltar(){
+        this.novoCadastro = false;
     }
 
     // Listas /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

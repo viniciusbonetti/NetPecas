@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ProdutosRoutingModule } from './produtos-routing.module';
 import { ProdutoComponent } from './produto/produto.component';
-import { ButtonModule, CardModule, FormModule, GridModule, SmartTableModule } from '@coreui/angular-pro';
+import { ButtonModule, CardModule, DatePickerModule, FormModule, GridModule, SmartTableModule } from '@coreui/angular-pro';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
@@ -20,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     FormModule,
     ButtonModule,
+    DatePickerModule,
   ]
 })
 export class ProdutosModule { }

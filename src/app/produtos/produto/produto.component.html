@@ -1,11 +1,19 @@
-<c-card>
+<c-card class="cards" *ngIf="!novoCadastro">
     <c-card-header>
         <h1>Produto</h1>
     </c-card-header>
 
     <c-card-body>
-        <form cForm [formGroup]="formFiltrarPecas" noValidate>
         <c-row>
+            <c-col class="justify-content-end">
+                <button cButton class="px-4 mb-3" color="secondary" (click)="cadastrar()">
+                    <p class="m-0 text-white"><i class="fa-regular fa-plus"></i>&nbsp; Adicionar</p>
+                </button>
+            </c-col>
+        </c-row>
+
+        <form cForm [formGroup]="formFiltrarPecas" noValidate>
+            <c-row>
                 <c-col md="5">
                     <div class="mb-1" cFormFloating>
                         <select cSelect id="selectCodigoFabricante" placeholder="teste" formControlName="codigo_fabricante">
@@ -67,5 +75,124 @@
             >
             </c-smart-table>
         </c-row>
+    </c-card-body>
+</c-card>
+
+<c-card class="cards" *ngIf="novoCadastro">
+    <c-card-header>
+        <c-col xs-6 class="d-flex justify-content-between">
+            <h1>Novo Produto</h1>
+            <button cButton color="primary" class="mb-1" (click)="voltar()"><i class="fa-regular fa-arrow-left"></i> Voltar</button>
+        </c-col>
+    </c-card-header>
+
+    <c-card-body>
+        <form cForm [formGroup]="formCadastrarProduto" noValidate>
+            <!-- INFORMAÇÕES BÁSICAS -->
+            <h5 class="mb-3">Informações Básicas</h5>
+            <c-input-group class="col-12 mb-1" sizing="sm">
+                <span class="input-group-text col-1" id="label-codigo_fabricante">Fabricante</span>
+                <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" maxlength="4"/>
+
+                <span class="input-group-text col-1" id="label-codigo_negocio">Negócio</span>
+                <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" maxlength="4"/>
+            </c-input-group>
+
+            <c-input-group class="mb-3" sizing="sm">
+                <span class="input-group-text col-1" id="label-codigo_peca">Código</span>
+                <input id="codigo_peca" name="codigo_peca" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_peca"/>
+
+                <span class="input-group-text col-1" id="label-descricao_peca">Descrição</span>
+                <input id="descricao_peca" name="descricao_peca" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="descricao_peca"/>
+            </c-input-group>
+
+            <!-- INFORMAÇÕES GERAIS -->
+            <h5 class="mb-3">Informações Gerais</h5>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-codigo_mpc">MPC</span>
+                <input id="codigo_mpc" name="codigo_mpc" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_mpc"/>
+
+                <span class="input-group-text col-2" id="label-valor_lpp">LPP</span>
+                <input id="valor_lpp" name="valor_lpp" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="valor_lpp"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-preco_compra">Preço de compra</span>
+                <input id="preco_compra" name="preco_compra" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="preco_compra"/>
+
+                <span class="input-group-text col-2" id="label-unidade_medida">Unidade</span>
+                <input id="unidade_medida" name="unidade_medida" type="Text" aria-label="unidade_medida" cFormControl formControlName="unidade_medida"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-classif_fiscal">Classificação fiscal</span>
+                <input id="classif_fiscal" name="classif_fiscal" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="classif_fiscal"/>
+
+                <span class="input-group-text col-2" id="label-ex">EX</span>
+                <input id="ex" name="ex" type="Text" aria-label="EX" cFormControl formControlName="ex"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-codigo_origem">Código de origem</span>
+                <input id="codigo_origem" name="codigo_origem" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_origem"/>
+
+                <span class="input-group-text col-2" id="label-perc_ipi">% IPI</span>
+                <input id="perc_ipi" name="perc_ipi" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="perc_ipi"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-peso">Peso</span>
+                <input id="peso" name="peso" type="Text" aria-label="peso" cFormControl formControlName="peso"/>
+
+                <span class="input-group-text col-2" id="label-qtde_embalagem">Qtde embalagem</span>
+                <input id="qtde_embalagem" name="qtde_embalagem" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="qtde_embalagem"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-codigo_desconto">Código desconto</span>
+                <input id="codigo_desconto" name="codigo_desconto" type="Text" aria-label="codigo_desconto" cFormControl formControlName="codigo_desconto"/>
+
+                <span class="input-group-text col-2" id="label-desconto_compra">Desconto Compra</span>
+                <input id="desconto_compra" name="desconto_compra" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="desconto_compra"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-desconto_venda">Desconto Venda</span>
+                <input id="desconto_venda" name="desconto_venda" type="Text" aria-label="desconto_venda" cFormControl formControlName="desconto_venda"/>
+
+                <span class="input-group-text col-2" id="label-familia">Família</span>
+                <input id="familia" name="familia" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="familia"/>
+            </c-input-group>
+            
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-chave_peca">Chave</span>
+                <input id="chave_peca" name="chave_peca" type="Text" aria-label="chave_peca" cFormControl formControlName="chave_peca"/>
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <label cInputGroupText for="imagem_peca">
+                    Imagem da peça
+                </label>
+                <input cFormControl id="imagem_peca" type="file" />
+            </c-input-group>
+
+            <c-input-group sizing="sm" class="mb-1">
+                <span class="input-group-text col-2" id="label-data_preco">Data preço</span>
+                <c-date-picker id="data_preco" name="data_preco" closeOnSelect formControlName="data_preco" placeholder="Selecione a data" size="sm"></c-date-picker>
+
+                <span class="input-group-text col-2" id="label-data_ultima_carga">Última carga</span>
+                <c-date-picker id="data_ultima_carga" name="data_ultima_carga" closeOnSelect formControlName="data_ultima_carga" placeholder="Selecione a data" size="sm"></c-date-picker>
+            </c-input-group>
+            
+            <c-input-group class="mb-1" sizing="sm">
+                <span class="input-group-text col-2" id="label-status_peca">
+                    Ativo:
+                    <c-form-check class="mx-5">
+                        <input class="p-2" cFormCheckInput id="status_peca" type="checkbox" formControlName="status_peca" />
+                    </c-form-check>
+                </span>
+            </c-input-group>
+        </form>
     </c-card-body>
 </c-card>
