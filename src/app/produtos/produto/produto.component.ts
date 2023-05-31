@@ -14,20 +14,21 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     formCadastrarProduto!: FormGroup;
 
     // booleans
-    novoCadastro:boolean = false;
-    pesquisou:boolean = false;
-    editarProduto:boolean = false;
+    novoCadastro: boolean = false;
+    pesquisou: boolean = false;
+    editarProduto: boolean = false;
     manualValidation: any;
-
+    temDependencia: boolean = false;
     // listas
     listaFabricantes: any;
     listaFabricantesCompleta: any;
     listaPecas: IItem[];
     listaErros = [];
+    listaCheckDelete: any;
 
     // ids
-    idPeca:string = '';
-    dadosFabricante:any;
+    idPeca: string = "";
+    dadosFabricante: any;
 
     constructor(private formBuilder: FormBuilder) {
         super();
@@ -45,13 +46,12 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
         this.listaFabricantes = resposta.data.data;
     }
 
-    async getListaFabricanteCompleta(){
+    async getListaFabricanteCompleta() {
         let resposta = await this.postInfo(this.paths.listaFabricanteCompleta);
         this.listaFabricantesCompleta = resposta.data.data;
-        
     }
 
-    createForm(){
+    createForm() {
         this.formFiltrarPecas = this.formBuilder.group(
             {
                 codigo_fabricante: [""],
@@ -63,30 +63,30 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
 
         this.formCadastrarProduto = this.formBuilder.group(
             {
-                codigo_fabricante: [''],
-                codigo_peca: [''],
-                descricao_peca: [''],
-                codigo_negocio: [''],
-                codigo_mpc: [''],
-                valor_lpp: [''],
-                preco_compra: [''],
-                data_preco: [''],
-                classif_fiscal: [''],
-                ex: [''],
-                codigo_origem: [''],
-                perc_ipi: [''],
-                peso: [''],
-                qtde_embalagem: [''],
-                codigo_desconto: [''],
-                pis_cofins: [''],
-                desconto_compra: [''],
-                desconto_venda: [''],
-                familia: [''],
-                unidade_medida: [''],
-                data_ultima_carga: [''],
-                chave_peca: [''],
-                imagem_peca: [''],
-                status_peca: [''],
+                codigo_fabricante: [""],
+                codigo_peca: [""],
+                descricao_peca: [""],
+                codigo_negocio: [""],
+                codigo_mpc: [""],
+                valor_lpp: [""],
+                preco_compra: [""],
+                data_preco: [""],
+                classif_fiscal: [""],
+                ex: [""],
+                codigo_origem: [""],
+                perc_ipi: [""],
+                peso: [""],
+                qtde_embalagem: [""],
+                codigo_desconto: [""],
+                pis_cofins: [""],
+                desconto_compra: [""],
+                desconto_venda: [""],
+                familia: [""],
+                unidade_medida: [""],
+                data_ultima_carga: [""],
+                chave_peca: [""],
+                imagem_peca: [""],
+                status_peca: [""],
             }
             // { validators: [PasswordValidators.confirmPassword] }
         );
@@ -98,26 +98,26 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
         this.pesquisou = true;
     }
 
-    cadastrar(){
+    cadastrar() {
         this.novoCadastro = true;
     }
 
-    voltar(){
+    voltar() {
         this.novoCadastro = false;
         this.editarProduto = false;
         this.formCadastrarProduto.reset();
     }
 
     // Cadastrar Novo Produto //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async sendNovoProduto(){
+    async sendNovoProduto() {
         let resposta = await this.postInfo(this.paths.pecaFabricante, this.formCadastrarProduto.value);
-        if(resposta.status === 200){
+        if (resposta.status === 200) {
             this.manualValidation = true;
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
             this.corTextoToast = "text-black";
-            this.mensagemToast = "Novo produto cadastrado!";   
+            this.mensagemToast = "Novo produto cadastrado!";
         } else {
             this.listaErros = resposta.response.data.data;
             this.manualValidation = false;
@@ -128,58 +128,58 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
             this.corTextoToast = "text-black";
-            this.mensagemToast = resposta.response.data.message;            
+            this.mensagemToast = resposta.response.data.message;
         }
         this.toggleToast();
     }
 
     // Editar Produto ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async editar(item:any){
+    async editar(item: any) {
         this.novoCadastro = true;
         this.editarProduto = true;
         this.idPeca = item.id;
         const path = this.paths.pecaFabricante + `/${this.idPeca}`;
         let resposta = await this.getInfo(path);
         console.log(resposta.data.data);
-        
+
         this.formCadastrarProduto.patchValue({
-                codigo_fabricante: resposta.data.data.codigo_fabricante.codigo_fabricante,
-                codigo_peca: resposta.data.data.codigo_peca,
-                descricao_peca: resposta.data.data.descricao_peca,
-                codigo_negocio: resposta.data.data.codigo_negocio.codigo_negocio,
-                codigo_mpc: resposta.data.data.codigo_mpc,
-                valor_lpp: resposta.data.data.valor_lpp,
-                preco_compra: resposta.data.data.preco_compra,
-                data_preco: resposta.data.data.data_preco,
-                classif_fiscal: resposta.data.data.classif_fiscal,
-                ex: resposta.data.data.ex,
-                codigo_origem: resposta.data.data.codigo_origem,
-                perc_ipi: resposta.data.data.perc_ipi,
-                peso: resposta.data.data.peso,
-                qtde_embalagem: resposta.data.data.qtde_embalagem,
-                codigo_desconto: resposta.data.data.codigo_desconto,
-                pis_cofins: resposta.data.data.pis_cofins,
-                desconto_compra: resposta.data.data.desconto_compra,
-                desconto_venda: resposta.data.data.desconto_venda,
-                familia: resposta.data.data.familia,
-                unidade_medida: resposta.data.data.unidade_medida,
-                data_ultima_carga: resposta.data.data.data_ultima_carga,
-                chave_peca: resposta.data.data.chave_peca,
-                imagem_peca: resposta.data.data.imagem_peca,
-                status_peca: resposta.data.data.status_peca,
+            codigo_fabricante: resposta.data.data.codigo_fabricante.codigo_fabricante,
+            codigo_peca: resposta.data.data.codigo_peca,
+            descricao_peca: resposta.data.data.descricao_peca,
+            codigo_negocio: resposta.data.data.codigo_negocio.codigo_negocio,
+            codigo_mpc: resposta.data.data.codigo_mpc,
+            valor_lpp: resposta.data.data.valor_lpp,
+            preco_compra: resposta.data.data.preco_compra,
+            data_preco: resposta.data.data.data_preco,
+            classif_fiscal: resposta.data.data.classif_fiscal,
+            ex: resposta.data.data.ex,
+            codigo_origem: resposta.data.data.codigo_origem,
+            perc_ipi: resposta.data.data.perc_ipi,
+            peso: resposta.data.data.peso,
+            qtde_embalagem: resposta.data.data.qtde_embalagem,
+            codigo_desconto: resposta.data.data.codigo_desconto,
+            pis_cofins: resposta.data.data.pis_cofins,
+            desconto_compra: resposta.data.data.desconto_compra,
+            desconto_venda: resposta.data.data.desconto_venda,
+            familia: resposta.data.data.familia,
+            unidade_medida: resposta.data.data.unidade_medida,
+            data_ultima_carga: resposta.data.data.data_ultima_carga,
+            chave_peca: resposta.data.data.chave_peca,
+            imagem_peca: resposta.data.data.imagem_peca,
+            status_peca: resposta.data.data.status_peca,
         });
     }
 
-    async sendEditarProduto(){
+    async sendEditarProduto() {
         const path = this.paths.pecaFabricante + `/${this.idPeca}`;
         let resposta = await this.putInfo(path, this.formCadastrarProduto.value);
-        if(resposta.status === 200){
+        if (resposta.status === 200) {
             this.manualValidation = true;
             this.corToast = "success";
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Sucesso!";
             this.corTextoToast = "text-black";
-            this.mensagemToast = "Produto atualizado!";   
+            this.mensagemToast = "Produto atualizado!";
         } else {
             this.listaErros = resposta.response.data.data;
             this.manualValidation = false;
@@ -190,30 +190,53 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
             this.posicaoToast = "bottom-center";
             this.tituloToast = "Falhou!";
             this.corTextoToast = "text-black";
-            this.mensagemToast = resposta.response.data.message;            
+            this.mensagemToast = resposta.response.data.message;
         }
         this.toggleToast();
-    
     }
 
     // Excluir Produto ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async deletarProduto(item:any){
+    async deletarProduto(item: any) {
+        this.temDependencia = false;
+
+        const formDelete = new FormData();
+        formDelete.append("tipo_exclusao", "pecaFabricante");
+        formDelete.append("codigo_fabricante", item.codigo_fabricante);
+        formDelete.append("codigo_peca", item.codigo_peca);
+
+        let resposta = await this.postInfo(this.paths.checkExclusao, formDelete);
+        this.listaCheckDelete = Object.keys(resposta.data.data).map((key) => ({ type: key, value: resposta.data.data[key] }));
+
         const type = "warning-message-and-cancel";
         this.mensagemTitulo = "Deseja deletar o produto?";
-        this.mensagemAlerta = "Esta ação não será reversível e irá deletar todos os registros relacionados ao produto!";
-        await this.showSwal(type);
+        this.mensagemAlerta = resposta.data.message + "<br>";
+
+        await this.listaCheckDelete.forEach((element: any) => {
+            if (element.value) {
+                this.temDependencia = true;
+                this.mensagemAlerta = this.mensagemAlerta + "<br>" + "<b>" + element.type + "</b>" + "<br>";
+            }
+        });
+
+        if (this.temDependencia) {
+            this.mensagemTitulo = "Atenção!";
+            await this.showSwal("basic");
+        } else if(this.temDependencia === false){
+            await this.showSwal(type);
+        }
+
         if (this.resultado) {
             const path = this.paths.pecaFabricante + `/${item.id}`;
-            let resposta = await this.deleteInfo(path);
-            if (resposta.status !== 200) {                
-                const type = 'failed';
-                this.mensagemTitulo = 'Falhou!'
-                this.mensagemAlerta = 'Verifique as dependencias deste produto para poder excluir este registro.'
+            let respostaDelete = await this.deleteInfo(path);
+            if (respostaDelete.status !== 200) {
+                const type = "failed";
+                this.mensagemTitulo = "Falhou!";
+                this.mensagemAlerta = "Verifique as dependencias deste produto para poder excluir este registro.";
                 await this.showSwal(type);
-            } else if (resposta.status === 200){
-                const type = 'success-message';
-                this.mensagemTitulo = 'Sucesso!'
-                this.mensagemAlerta = 'O registro foi deletado com sucesso.'
+            } else if (respostaDelete.status === 200) {
+                const type = "success-message";
+                this.mensagemTitulo = "Sucesso!";
+                this.mensagemAlerta = "O registro foi deletado com sucesso.";
                 await this.showSwal(type);
             }
             this.getListaPecas();
@@ -221,13 +244,13 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     }
 
     // Modal Resumo Frabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async resumoProduto(item:any){
+    async resumoProduto(item: any) {
         this.dadosFabricante = item;
-        console.log(this.dadosFabricante);        
+        console.log(this.dadosFabricante);
     }
 
     // Lista de Erros /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    setErros(){
+    setErros() {
         this.listaErros.forEach((item) => {
             switch (item["campo"]) {
                 case "codigo_fabricante": {

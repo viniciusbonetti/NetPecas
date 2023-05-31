@@ -27,6 +27,7 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         listaPecaFabricante: "/listaPecaFabricante",
         pecaFabricante: "/pecaFabricante",
         listaFabricanteCompleta: "/listaFabricanteCompleta",
+        checkExclusao: "/checkExclusao",
     };
 
     public getToken() {

@@ -19,12 +19,14 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
     listaNegocio: IItem[];
     listaModalResumoFabricante: IItem[];
     listaErros = [];
+    listaCheckDelete:any;
 
     // booleans
     novoCadastro: boolean = false;
     cadastrarNegocio: boolean = false;
     editarItemNegocio: boolean = false;
     manualValidation: any;
+    temDependencia: boolean = false;
 
     // Ids
     idFabricante: string = "";
@@ -201,10 +203,33 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
 
     // Excluir Fabricante /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async deletarFabricante(item: any) {
+        this.temDependencia = false;
+
+        const formDelete = new FormData();
+        formDelete.append("tipo_exclusao", "fabricante");
+        formDelete.append("codigo_fabricante", item.codigo_fabricante);
+
+        let resposta = await this.postInfo(this.paths.checkExclusao, formDelete);
+        this.listaCheckDelete = Object.keys(resposta.data.data).map((key) => ({ type: key, value: resposta.data.data[key] }));
+
         const type = "warning-message-and-cancel";
         this.mensagemTitulo = "Deseja deletar o fabricante?";
-        this.mensagemAlerta = "Esta ação não será reversível e irá deletar todos os registros relacionados ao fabricante!";
-        await this.showSwal(type);
+        this.mensagemAlerta = resposta.data.message + "<br>";
+        
+        await this.listaCheckDelete.forEach((element: any) => {
+            if (element.value) {
+                this.temDependencia = true;
+                this.mensagemAlerta = this.mensagemAlerta + "<br>" + "<b>" + element.type + "</b>" + "<br>";
+            }
+        });
+
+        if (this.temDependencia) {
+            this.mensagemTitulo = "Atenção!";
+            await this.showSwal("basic");
+        } else if(this.temDependencia === false){
+            await this.showSwal(type);
+        }
+
         if (this.resultado) {
             const path = this.paths.fabricante + `/${item.id}`;
             let resposta = await this.deleteInfo(path);
@@ -292,10 +317,34 @@ export class FabricanteComponent extends ControllerComponent implements OnInit {
 
     // Excluir Negocio ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async deletarNegocio(item: any) {
+        this.temDependencia = false;
+
+        const formDelete = new FormData();
+        formDelete.append("tipo_exclusao", "negocio");
+        formDelete.append("codigo_fabricante", item.codigo_fabricante.codigo_fabricante);
+        formDelete.append("codigo_negocio", item.codigo_negocio);
+
+        let resposta = await this.postInfo(this.paths.checkExclusao, formDelete);
+        this.listaCheckDelete = Object.keys(resposta.data.data).map((key) => ({ type: key, value: resposta.data.data[key] }));
+        
         const type = "warning-message-and-cancel";
         this.mensagemTitulo = "Deseja deletar o negócio?";
-        this.mensagemAlerta = "Esta ação não será reversível e irá deletar todos os registros relacionados ao negócio!";
-        await this.showSwal(type);
+        this.mensagemAlerta = resposta.data.message + "<br>";
+
+        await this.listaCheckDelete.forEach((element: any) => {
+            if (element.value) {
+                this.temDependencia = true;
+                this.mensagemAlerta = this.mensagemAlerta + "<br>" + "<b>" + element.type + "</b>" + "<br>";
+            }
+        });
+
+        if (this.temDependencia) {
+            this.mensagemTitulo = "Atenção!";
+            await this.showSwal("basic");
+        } else if(this.temDependencia === false){
+            await this.showSwal(type);
+        }
+
         if (this.resultado) {
             let resposta = await this.deleteInfo(this.paths.negocio + `/${item.id}`);
             if (resposta.status !== 200) {                

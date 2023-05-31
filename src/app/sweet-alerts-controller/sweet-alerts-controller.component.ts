@@ -12,14 +12,17 @@ export class SweetAlertsControllerComponent {
   public resultado = false;
   public mensagemTitulo = '';
   public mensagemAlerta = '';
+  public mensagemAlertaHtml = '';
     async showSwal(type:any) {
       if (type == 'basic') {
           swal.fire({
-              title: "Here's a message!",
+              title: this.mensagemTitulo,
+              html: this.mensagemAlerta,
               buttonsStyling: false,
               customClass:{
                 confirmButton: "btn btn-success"
-              }
+              },
+              icon: 'warning',
           });
 
       } else if (type == 'title-and-text') {
@@ -73,15 +76,16 @@ export class SweetAlertsControllerComponent {
       } else if (type == 'warning-message-and-cancel') {
           await swal.fire({
               title: this.mensagemTitulo,
-              text: this.mensagemAlerta,
+              // text: this.mensagemAlerta,
               icon: 'warning',
               showCancelButton: true,
-              confirmButtonText: 'Sim, deletar',
-              cancelButtonText: 'Não, manter',
+              confirmButtonText: 'Deletar',
+              cancelButtonText: 'Manter',
               customClass:{
                 confirmButton: "btn btn-success",
                 cancelButton: "btn btn-danger",
               },
+              html:this.mensagemAlerta,
               buttonsStyling: false
           }).then((result) => {
             if (result.value) {              
