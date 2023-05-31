@@ -21,11 +21,13 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
 
     // listas
     listaFabricantes: any;
+    listaFabricantesCompleta: any;
     listaPecas: IItem[];
     listaErros = [];
 
     // ids
     idPeca:string = '';
+    dadosFabricante:any;
 
     constructor(private formBuilder: FormBuilder) {
         super();
@@ -33,6 +35,7 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
 
     ngOnInit(): void {
         this.getListaFabricantes();
+        this.getListaFabricanteCompleta();
         this.createForm();
     }
 
@@ -40,6 +43,12 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     async getListaFabricantes() {
         let resposta = await this.postInfoSemToken(this.paths.listaFabricante);
         this.listaFabricantes = resposta.data.data;
+    }
+
+    async getListaFabricanteCompleta(){
+        let resposta = await this.postInfo(this.paths.listaFabricanteCompleta);
+        this.listaFabricantesCompleta = resposta.data.data;
+        
     }
 
     createForm(){
@@ -69,6 +78,7 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
                 peso: [''],
                 qtde_embalagem: [''],
                 codigo_desconto: [''],
+                pis_cofins: [''],
                 desconto_compra: [''],
                 desconto_venda: [''],
                 familia: [''],
@@ -94,6 +104,7 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
 
     voltar(){
         this.novoCadastro = false;
+        this.editarProduto = false;
         this.formCadastrarProduto.reset();
     }
 
@@ -123,35 +134,40 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     }
 
     // Editar Produto ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    editar(item:any){
+    async editar(item:any){
         this.novoCadastro = true;
         this.editarProduto = true;
-        this.formCadastrarProduto.patchValue({
-                codigo_fabricante: item.codigo_fabricante,
-                codigo_peca: item.codigo_peca,
-                descricao_peca: item.descricao_peca,
-                codigo_negocio: item.codigo_negocio,
-                codigo_mpc: item.codigo_mpc,
-                valor_lpp: item.valor_lpp,
-                preco_compra: item.preco_compra,
-                data_preco: item.data_preco,
-                classif_fiscal: item.classif_fiscal,
-                ex: item.ex,
-                codigo_origem: item.codigo_origem,
-                perc_ipi: item.perc_ipi,
-                peso: item.peso,
-                qtde_embalagem: item.qtde_embalagem,
-                codigo_desconto: item.codigo_desconto,
-                desconto_compra: item.desconto_compra,
-                desconto_venda: item.desconto_venda,
-                familia: item.familia,
-                unidade_medida: item.unidade_medida,
-                data_ultima_carga: item.data_ultima_carga,
-                chave_peca: item.chave_peca,
-                imagem_peca: item.imagem_peca,
-                status_peca: item.status_peca,
-        });
         this.idPeca = item.id;
+        const path = this.paths.pecaFabricante + `/${this.idPeca}`;
+        let resposta = await this.getInfo(path);
+        console.log(resposta.data.data);
+        
+        this.formCadastrarProduto.patchValue({
+                codigo_fabricante: resposta.data.data.codigo_fabricante.codigo_fabricante,
+                codigo_peca: resposta.data.data.codigo_peca,
+                descricao_peca: resposta.data.data.descricao_peca,
+                codigo_negocio: resposta.data.data.codigo_negocio.codigo_negocio,
+                codigo_mpc: resposta.data.data.codigo_mpc,
+                valor_lpp: resposta.data.data.valor_lpp,
+                preco_compra: resposta.data.data.preco_compra,
+                data_preco: resposta.data.data.data_preco,
+                classif_fiscal: resposta.data.data.classif_fiscal,
+                ex: resposta.data.data.ex,
+                codigo_origem: resposta.data.data.codigo_origem,
+                perc_ipi: resposta.data.data.perc_ipi,
+                peso: resposta.data.data.peso,
+                qtde_embalagem: resposta.data.data.qtde_embalagem,
+                codigo_desconto: resposta.data.data.codigo_desconto,
+                pis_cofins: resposta.data.data.pis_cofins,
+                desconto_compra: resposta.data.data.desconto_compra,
+                desconto_venda: resposta.data.data.desconto_venda,
+                familia: resposta.data.data.familia,
+                unidade_medida: resposta.data.data.unidade_medida,
+                data_ultima_carga: resposta.data.data.data_ultima_carga,
+                chave_peca: resposta.data.data.chave_peca,
+                imagem_peca: resposta.data.data.imagem_peca,
+                status_peca: resposta.data.data.status_peca,
+        });
     }
 
     async sendEditarProduto(){
@@ -203,6 +219,13 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
             this.getListaPecas();
         }
     }
+
+    // Modal Resumo Frabricante ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async resumoProduto(item:any){
+        this.dadosFabricante = item;
+        console.log(this.dadosFabricante);        
+    }
+
     // Lista de Erros /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     setErros(){
         this.listaErros.forEach((item) => {

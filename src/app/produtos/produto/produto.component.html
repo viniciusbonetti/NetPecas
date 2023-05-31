@@ -78,7 +78,7 @@
                     <ng-container [ngSwitch]="columnName">
                         <ng-container *ngSwitchCase="'acoes'" class="py-2">
                             <c-col xs-6 class="d-flex justify-content-center align-items-center">
-                                <!-- <button style="background: none; border: none" [cModalToggle]="modalResumoFabricante.id" (click)="resumoFabricante(item)"><i class="fa-regular fa-magnifying-glass-plus text-secondary" style="font-size: 1.5rem"></i></button> -->
+                                <button style="background: none; border: none" [cModalToggle]="modalResumoProduto.id" (click)="resumoProduto(item)"><i class="fa-regular fa-magnifying-glass-plus text-secondary" style="font-size: 1.5rem"></i></button>
                                 <button style="background: none; border: none" (click)="editar(item)"><i class="fa-regular fa-pen-to-square text-secondary" style="font-size: 1.5rem"></i></button>
                                 <button style="background: none; border: none" (click)="deletarProduto(item)" ><i class="fa-solid fa-trash-xmark text-danger" style="font-size: 1.5rem"></i></button>
                             </c-col>
@@ -93,10 +93,26 @@
     </c-card-body>
 </c-card>
 
+<c-modal #modalResumoProduto id="modalResumoProduto" alignment="center" size="xl">
+    <c-modal-header>
+        <div class="row col-12">
+            <h5 cModalTitle class="col-6">Peça: {{ dadosFabricante?.codigo_peca }} </h5>
+            <h5 cModalTitle class="col-6">Fabricante: {{ dadosFabricante?.codigo_fabricante }} </h5>
+
+        </div>
+        <button [cModalToggle]="modalResumoProduto.id" cButtonClose></button>
+    </c-modal-header>
+
+    <c-modal-body>
+
+    </c-modal-body>
+</c-modal>
+
 <c-card class="cards" *ngIf="novoCadastro">
     <c-card-header>
         <c-col xs-6 class="d-flex justify-content-between">
-            <h1>Novo Produto</h1>
+            <h1 *ngIf="!editarProduto">Novo Produto</h1>
+            <h1 *ngIf="editarProduto">Editar Produto</h1>
             <button cButton color="primary" class="mb-1" (click)="voltar()"><i class="fa-regular fa-arrow-left"></i> Voltar</button>
         </c-col>
     </c-card-header>
@@ -107,14 +123,18 @@
             <h5 class="mb-3">Informações Básicas</h5>
             <c-row>
                 <c-col>
-                    <c-input-group class="mb-1" sizing="sm">
+                    <c-input-group class="mb-2" sizing="sm">
+                        <!-- <label cInputGroupText for="selectCodigoFabricante" class="col-3"> Tipo </label> -->
                         <span class="input-group-text col-3" id="label-codigo_fabricante">Fabricante</span>
-                        <input id="codigo_fabricante" name="codigo_fabricante" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_fabricante" [valid]="this.formCadastrarProduto.controls['codigo_fabricante'].errors?.valid" maxlength="4"/>
+                        <select cSelect id="selectCodigoFabricante" formControlName="codigo_fabricante" [valid]="this.formCadastrarProduto.controls['codigo_fabricante'].errors?.valid" sizing="sm" style="max-height: 31px;">
+                            <!-- <option disabled selected value="">Selecione o fabricante</option> -->
+                            <option *ngFor="let item of listaFabricantesCompleta" value="{{ item.codigo_fabricante }}"> {{ item.codigo_fabricante }} </option>
+                        </select>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['codigo_fabricante'].valid"> {{ this.formCadastrarProduto.controls['codigo_fabricante'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group class="mb-1" sizing="sm">                
+                    <c-input-group class="mb-2" sizing="sm">                
                         <span class="input-group-text col-3" id="label-codigo_negocio">Negócio</span>
                         <input id="codigo_negocio" name="codigo_negocio" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_negocio" [valid]="this.formCadastrarProduto.controls['codigo_negocio'].errors?.valid" maxlength="4"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['codigo_negocio'].valid"> {{ this.formCadastrarProduto.controls['codigo_negocio'].errors?.erro }} </c-form-feedback>
@@ -124,14 +144,14 @@
 
             <c-row>
                 <c-col>
-                    <c-input-group class="mb-3" sizing="sm">
+                    <c-input-group class="mb-2" sizing="sm">
                         <span class="input-group-text col-3" id="label-codigo_peca">Código</span>
                         <input id="codigo_peca" name="codigo_peca" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_peca" [valid]="this.formCadastrarProduto.controls['codigo_peca'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['codigo_peca'].valid"> {{ this.formCadastrarProduto.controls['codigo_peca'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group class="mb-3" sizing="sm">
+                    <c-input-group class="mb-2" sizing="sm">
                         <span class="input-group-text col-3" id="label-descricao_peca">Descrição</span>
                         <input id="descricao_peca" name="descricao_peca" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="descricao_peca" [valid]="this.formCadastrarProduto.controls['descricao_peca'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['descricao_peca'].valid"> {{ this.formCadastrarProduto.controls['descricao_peca'].errors?.erro }} </c-form-feedback>
@@ -145,14 +165,14 @@
 
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-codigo_mpc">Código MPC</span>
                         <input id="codigo_mpc" name="codigo_mpc" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_mpc" [valid]="this.formCadastrarProduto.controls['codigo_mpc'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['codigo_mpc'].valid"> {{ this.formCadastrarProduto.controls['codigo_mpc'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-valor_lpp">Valor lista</span>
                         <input id="valor_lpp" name="valor_lpp" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="valor_lpp" [valid]="this.formCadastrarProduto.controls['valor_lpp'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['valor_lpp'].valid"> {{ this.formCadastrarProduto.controls['valor_lpp'].errors?.erro }} </c-form-feedback>
@@ -162,14 +182,14 @@
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-preco_compra">Preço de compra</span>
                         <input id="preco_compra" name="preco_compra" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="preco_compra" [valid]="this.formCadastrarProduto.controls['preco_compra'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['preco_compra'].valid"> {{ this.formCadastrarProduto.controls['preco_compra'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-unidade_medida">Unidade</span>
                         <input id="unidade_medida" name="unidade_medida" type="Text" aria-label="unidade_medida" cFormControl formControlName="unidade_medida" [valid]="this.formCadastrarProduto.controls['unidade_medida'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['unidade_medida'].valid"> {{ this.formCadastrarProduto.controls['unidade_medida'].errors?.erro }} </c-form-feedback>
@@ -179,14 +199,14 @@
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-classif_fiscal">Classificação fiscal</span>
                         <input id="classif_fiscal" name="classif_fiscal" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="classif_fiscal" [valid]="this.formCadastrarProduto.controls['classif_fiscal'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['classif_fiscal'].valid"> {{ this.formCadastrarProduto.controls['classif_fiscal'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-ex">EX</span>
                         <input id="ex" name="ex" type="Text" aria-label="EX" cFormControl formControlName="ex" [valid]="this.formCadastrarProduto.controls['ex'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['ex'].valid"> {{ this.formCadastrarProduto.controls['ex'].errors?.erro }} </c-form-feedback>
@@ -196,14 +216,14 @@
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-codigo_origem">Código de origem</span>
                         <input id="codigo_origem" name="codigo_origem" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="codigo_origem" [valid]="this.formCadastrarProduto.controls['codigo_origem'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['codigo_origem'].valid"> {{ this.formCadastrarProduto.controls['codigo_origem'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-perc_ipi">% IPI</span>
                         <input id="perc_ipi" name="perc_ipi" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="perc_ipi" [valid]="this.formCadastrarProduto.controls['perc_ipi'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['perc_ipi'].valid"> {{ this.formCadastrarProduto.controls['perc_ipi'].errors?.erro }} </c-form-feedback>
@@ -213,14 +233,14 @@
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-peso">Peso</span>
                         <input id="peso" name="peso" type="Text" aria-label="peso" cFormControl formControlName="peso" [valid]="this.formCadastrarProduto.controls['peso'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['peso'].valid"> {{ this.formCadastrarProduto.controls['peso'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-qtde_embalagem">Qtde embalagem</span>
                         <input id="qtde_embalagem" name="qtde_embalagem" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="qtde_embalagem" [valid]="this.formCadastrarProduto.controls['qtde_embalagem'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['qtde_embalagem'].valid"> {{ this.formCadastrarProduto.controls['qtde_embalagem'].errors?.erro }} </c-form-feedback>
@@ -230,14 +250,14 @@
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-codigo_desconto">Código desconto</span>
                         <input id="codigo_desconto" name="codigo_desconto" type="Text" aria-label="codigo_desconto" cFormControl formControlName="codigo_desconto" [valid]="this.formCadastrarProduto.controls['codigo_desconto'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['codigo_desconto'].valid"> {{ this.formCadastrarProduto.controls['codigo_desconto'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-desconto_compra">Desconto Compra</span>
                         <input id="desconto_compra" name="desconto_compra" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="desconto_compra" [valid]="this.formCadastrarProduto.controls['desconto_compra'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['desconto_compra'].valid"> {{ this.formCadastrarProduto.controls['desconto_compra'].errors?.erro }} </c-form-feedback>
@@ -247,14 +267,14 @@
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-desconto_venda">Desconto Venda</span>
                         <input id="desconto_venda" name="desconto_venda" type="Text" aria-label="desconto_venda" cFormControl formControlName="desconto_venda" [valid]="this.formCadastrarProduto.controls['desconto_venda'].errors?.valid"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['desconto_venda'].valid"> {{ this.formCadastrarProduto.controls['desconto_venda'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-familia">Família</span>
                         <input id="familia" name="familia" type="Text" aria-label="Codigo do fabricante" cFormControl formControlName="familia"/>
                     </c-input-group>
@@ -263,32 +283,41 @@
             
             <c-row>
                 <c-col md="6">
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-chave_peca">Chave</span>
                         <input id="chave_peca" name="chave_peca" type="Text" aria-label="chave_peca" cFormControl formControlName="chave_peca"/>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
-                        <label cInputGroupText for="imagem_peca" class="col-3">
-                            Imagem da peça
-                        </label>
-                        <input cFormControl id="imagem_peca" type="file" />
+                    <c-input-group sizing="sm" class="mb-2">
+                        <span class="input-group-text col-3" id="label-pis_cofins">PIS/COFINS</span>
+                        <input id="pis_cofins" name="pis_cofins" type="Text" aria-label="pis_cofins" cFormControl formControlName="pis_cofins"/>
                     </c-input-group>
                 </c-col>
             </c-row>
             
             <c-row>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-data_preco">Data preço</span>
                         <c-date-picker id="data_preco" name="data_preco" closeOnSelect formControlName="data_preco" placeholder="Selecione a data" size="sm"></c-date-picker>
                     </c-input-group>
                 </c-col>
                 <c-col>
-                    <c-input-group sizing="sm" class="mb-1">
+                    <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-data_ultima_carga">Última carga</span>
                         <c-date-picker id="data_ultima_carga" name="data_ultima_carga" closeOnSelect formControlName="data_ultima_carga" placeholder="Selecione a data" size="sm"></c-date-picker>
+                    </c-input-group>
+                </c-col>
+            </c-row>
+
+            <c-row>
+                <c-col md="6">
+                    <c-input-group sizing="sm" class="mb-2">
+                        <label cInputGroupText for="imagem_peca" class="col-3">
+                            Imagem da peça
+                        </label>
+                        <input cFormControl id="imagem_peca" type="file" />
                     </c-input-group>
                 </c-col>
             </c-row>
