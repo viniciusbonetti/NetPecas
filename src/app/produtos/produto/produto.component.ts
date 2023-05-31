@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { IColumn, IItem } from "@coreui/angular-pro/lib/smart-table/smart-table.type";
 import { ControllerComponent } from "src/app/controller/controller/controller.component";
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: "app-produto",
@@ -110,6 +111,10 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
 
     // Cadastrar Novo Produto //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async sendNovoProduto() {
+        const datepipe: DatePipe = new DatePipe('en-US')
+        this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco,'YYYY-MM-dd')
+        console.log(this.formCadastrarProduto.value.data_preco);
+        
         let resposta = await this.postInfo(this.paths.pecaFabricante, this.formCadastrarProduto.value);
         if (resposta.status === 200) {
             this.manualValidation = true;
