@@ -76,6 +76,22 @@
             <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
                 <td>
                     <ng-container [ngSwitch]="columnName">
+                        <ng-container *ngSwitchCase="'data_preco'">
+                            {{ item.data_preco | date: 'dd/MM/yyyy'}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'data_ultima_carga'">
+                            {{ item.data_ultima_carga | date: 'dd/MM/yyyy'}}
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'perc_ipi'">
+                            <td class="text-start">
+                                {{ item.perc_ipi | currency:'BRL':'symbol':'1.2-2' }}
+                            </td>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'valor_lpp'">
+                            <td class="text-start">
+                                {{ item.valor_lpp | currency:'BRL':'symbol':'1.2-2' }}
+                            </td>
+                        </ng-container>
                         <ng-container *ngSwitchCase="'acoes'" class="py-2">
                             <c-col xs-6 class="d-flex justify-content-center align-items-center">
                                 <button style="background: none; border: none" [cModalToggle]="modalResumoProduto.id" (click)="resumoProduto(item)"><i class="fa-regular fa-magnifying-glass-plus text-secondary" style="font-size: 1.5rem"></i></button>
