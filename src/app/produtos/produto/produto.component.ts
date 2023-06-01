@@ -1,8 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { IColumn, IItem } from "@coreui/angular-pro/lib/smart-table/smart-table.type";
 import { ControllerComponent } from "src/app/controller/controller/controller.component";
-import { DatePipe } from '@angular/common';
+import { DatePipe } from "@angular/common";
+import { formatCurrency } from "@angular/common";
+import { LOCALE_ID } from "@angular/core";
 
 @Component({
     selector: "app-produto",
@@ -20,6 +22,7 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     editarProduto: boolean = false;
     manualValidation: any;
     temDependencia: boolean = false;
+
     // listas
     listaFabricantes: any;
     listaFabricantesCompleta: any;
@@ -30,8 +33,9 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     // ids
     idPeca: string = "";
     dadosFabricante: any;
+    teste: any;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, @Inject(LOCALE_ID) public locale: string) {
         super();
     }
 
@@ -111,9 +115,13 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
 
     // Cadastrar Novo Produto //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async sendNovoProduto() {
-        const datepipe: DatePipe = new DatePipe('en-US')
-        this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco,'YYYY-MM-dd')
-        console.log(this.formCadastrarProduto.value.data_preco);
+        const datepipe: DatePipe = new DatePipe("en-US");
+        this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco, "YYYY-MM-dd");
+        this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
+        this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
+        this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
+        this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
+        this.formCadastrarProduto.value.desconto_venda = formatCurrency(this.formCadastrarProduto.value.desconto_venda,this.locale,'');
         
         let resposta = await this.postInfo(this.paths.pecaFabricante, this.formCadastrarProduto.value);
         if (resposta.status === 200) {
@@ -145,7 +153,6 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
         this.idPeca = item.id;
         const path = this.paths.pecaFabricante + `/${this.idPeca}`;
         let resposta = await this.getInfo(path);
-        console.log(resposta.data.data);
 
         this.formCadastrarProduto.patchValue({
             codigo_fabricante: resposta.data.data.codigo_fabricante.codigo_fabricante,
@@ -176,6 +183,14 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     }
 
     async sendEditarProduto() {
+        const datepipe: DatePipe = new DatePipe("en-US");
+        this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco, "YYYY-MM-dd");
+        this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
+        this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
+        this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
+        this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
+        this.formCadastrarProduto.value.desconto_venda = formatCurrency(this.formCadastrarProduto.value.desconto_venda,this.locale,'');
+        
         const path = this.paths.pecaFabricante + `/${this.idPeca}`;
         let resposta = await this.putInfo(path, this.formCadastrarProduto.value);
         if (resposta.status === 200) {
@@ -226,7 +241,7 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
         if (this.temDependencia) {
             this.mensagemTitulo = "Atenção!";
             await this.showSwal("basic");
-        } else if(this.temDependencia === false){
+        } else if (this.temDependencia === false) {
             await this.showSwal(type);
         }
 
