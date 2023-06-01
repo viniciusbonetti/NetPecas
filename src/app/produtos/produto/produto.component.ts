@@ -117,11 +117,11 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     async sendNovoProduto() {
         const datepipe: DatePipe = new DatePipe("en-US");
         this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco, "YYYY-MM-dd");
-        this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
-        this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
-        this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
-        this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
-        this.formCadastrarProduto.value.desconto_venda = formatCurrency(this.formCadastrarProduto.value.desconto_venda,this.locale,'');
+        // this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
+        // this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
+        // this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
+        // this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
+        // this.formCadastrarProduto.value.desconto_venda = formatCurrency(this.formCadastrarProduto.value.desconto_venda,this.locale,'');
         
         let resposta = await this.postInfo(this.paths.pecaFabricante, this.formCadastrarProduto.value);
         if (resposta.status === 200) {
@@ -185,11 +185,11 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     async sendEditarProduto() {
         const datepipe: DatePipe = new DatePipe("en-US");
         this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco, "YYYY-MM-dd");
-        this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
-        this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
-        this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
-        this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
-        this.formCadastrarProduto.value.desconto_venda = formatCurrency(this.formCadastrarProduto.value.desconto_venda,this.locale,'');
+        // this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
+        // this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
+        // this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
+        // this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
+        // this.formCadastrarProduto.value.desconto_venda = formatCurrency(this.formCadastrarProduto.value.desconto_venda,this.locale,'');
         
         const path = this.paths.pecaFabricante + `/${this.idPeca}`;
         let resposta = await this.putInfo(path, this.formCadastrarProduto.value);
