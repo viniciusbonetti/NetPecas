@@ -84,12 +84,12 @@
                         </ng-container>
                         <ng-container *ngSwitchCase="'perc_ipi'">
                             <td class="text-start">
-                                {{ item.perc_ipi }}
+                                {{ item.perc_ipi  | currency: 'BRL'}}
                             </td>
                         </ng-container>
                         <ng-container *ngSwitchCase="'valor_lpp'">
                             <td class="text-start">
-                                {{ item.valor_lpp }}
+                                {{ item.valor_lpp | currency: 'BRL'}}
                             </td>
                         </ng-container>
                         <ng-container *ngSwitchCase="'acoes'" class="py-2">
@@ -190,7 +190,7 @@
                 <c-col>
                     <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-valor_lpp">Valor lista</span>
-                        <input id="valor_lpp" name="valor_lpp" type="number" aria-label="Codigo do fabricante" cFormControl formControlName="valor_lpp" [valid]="this.formCadastrarProduto.controls['valor_lpp'].errors?.valid">
+                        <input id="valor_lpp" name="valor_lpp" type="currency" aria-label="Codigo do fabricante" cFormControl formControlName="valor_lpp" [valid]="this.formCadastrarProduto.controls['valor_lpp'].errors?.valid" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }">
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['valor_lpp'].valid"> {{ this.formCadastrarProduto.controls['valor_lpp'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
@@ -200,7 +200,7 @@
                 <c-col>
                     <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-preco_compra">Preço de compra</span>
-                        <input id="preco_compra" name="preco_compra" type="number" aria-label="Codigo do fabricante" cFormControl formControlName="preco_compra" [valid]="this.formCadastrarProduto.controls['preco_compra'].errors?.valid"/>
+                        <input id="preco_compra" name="preco_compra" type="currency" aria-label="Codigo do fabricante" cFormControl formControlName="preco_compra" [valid]="this.formCadastrarProduto.controls['preco_compra'].errors?.valid" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['preco_compra'].valid"> {{ this.formCadastrarProduto.controls['preco_compra'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
@@ -241,7 +241,7 @@
                 <c-col>
                     <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-perc_ipi">% IPI</span>
-                        <input id="perc_ipi" name="perc_ipi" type="number" aria-label="Codigo do fabricante" cFormControl formControlName="perc_ipi" [valid]="this.formCadastrarProduto.controls['perc_ipi'].errors?.valid"/>
+                        <input id="perc_ipi" name="perc_ipi" type="currency" aria-label="Codigo do fabricante" cFormControl formControlName="perc_ipi" [valid]="this.formCadastrarProduto.controls['perc_ipi'].errors?.valid" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['perc_ipi'].valid"> {{ this.formCadastrarProduto.controls['perc_ipi'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
@@ -275,7 +275,7 @@
                 <c-col>
                     <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-desconto_compra">Desconto Compra</span>
-                        <input id="desconto_compra" name="desconto_compra" type="number" aria-label="Codigo do fabricante" cFormControl formControlName="desconto_compra" [valid]="this.formCadastrarProduto.controls['desconto_compra'].errors?.valid"/>
+                        <input id="desconto_compra" name="desconto_compra" type="currency" aria-label="Codigo do fabricante" cFormControl formControlName="desconto_compra" [valid]="this.formCadastrarProduto.controls['desconto_compra'].errors?.valid" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['desconto_compra'].valid"> {{ this.formCadastrarProduto.controls['desconto_compra'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>
@@ -285,7 +285,7 @@
                 <c-col>
                     <c-input-group sizing="sm" class="mb-2">
                         <span class="input-group-text col-3" id="label-desconto_venda">Desconto Venda</span>
-                        <input id="desconto_venda" name="desconto_venda" type="number" aria-label="desconto_venda" cFormControl formControlName="desconto_venda" [valid]="this.formCadastrarProduto.controls['desconto_venda'].errors?.valid"/>
+                        <input id="desconto_venda" name="desconto_venda" type="currency" aria-label="desconto_venda" cFormControl formControlName="desconto_venda" [valid]="this.formCadastrarProduto.controls['desconto_venda'].errors?.valid" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"/>
                         <c-form-feedback [valid]="this.formCadastrarProduto.controls['desconto_venda'].valid"> {{ this.formCadastrarProduto.controls['desconto_venda'].errors?.erro }} </c-form-feedback>
                     </c-input-group>
                 </c-col>

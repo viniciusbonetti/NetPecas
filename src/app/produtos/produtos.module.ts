@@ -5,6 +5,7 @@ import { ProdutosRoutingModule } from './produtos-routing.module';
 import { ProdutoComponent } from './produto/produto.component';
 import { ButtonModule, CardModule, DatePickerModule, FormModule, GridModule, ModalModule, SharedModule, SmartTableModule, ToastModule } from '@coreui/angular-pro';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     DatePickerModule,
     ToastModule,
     SharedModule,
-    ModalModule
+    ModalModule,
+    CurrencyMaskModule,
   ]
 })
 export class ProdutosModule { }

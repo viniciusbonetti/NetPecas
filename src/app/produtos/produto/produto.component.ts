@@ -5,6 +5,7 @@ import { ControllerComponent } from "src/app/controller/controller/controller.co
 import { DatePipe } from "@angular/common";
 import { formatCurrency } from "@angular/common";
 import { LOCALE_ID } from "@angular/core";
+declare var $:any
 
 @Component({
     selector: "app-produto",
@@ -180,12 +181,50 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
             imagem_peca: resposta.data.data.imagem_peca,
             status_peca: resposta.data.data.status_peca,
         });
+        // $(document).ready(function(){
+        //     $('.date').mask('00/00/0000');
+        //     $('.time').mask('00:00:00');
+        //     $('.date_time').mask('00/00/0000 00:00:00');
+        //     $('.cep').mask('00000-000');
+        //     $('.phone').mask('0000-0000');
+        //     $('.phone_with_ddd').mask('(00) 0000-0000');
+        //     $('.phone_us').mask('(000) 000-0000');
+        //     $('.mixed').mask('AAA 000-S0S');
+        //     $('.cpf').mask('000.000.000-00', {reverse: true});
+        //     $('.cnpj').mask('00.000.000/0000-00', {reverse: true});
+        //     $('.money').mask('000.000.000.000.000,00', {reverse: true});
+        //     $('.money2').mask("#.##0,00", {reverse: true});
+        //     $('.ip_address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+        //       translation: {
+        //         'Z': {
+        //           pattern: /[0-9]/, optional: true
+        //         }
+        //       }
+        //     });
+        //     $('.ip_address').mask('099.099.099.099');
+        //     $('.percent').mask('##0,00%', {reverse: true});
+        //     $('.clear-if-not-match').mask("00/00/0000", {clearIfNotMatch: true});
+        //     $('.placeholder').mask("00/00/0000", {placeholder: "__/__/____"});
+        //     $('.fallback').mask("00r00r0000", {
+        //         translation: {
+        //           'r': {
+        //             pattern: /[\/]/,
+        //             fallback: '/'
+        //           },
+        //           placeholder: "__/__/____"
+        //         }
+        //       });
+        //     $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
+        //   });
+        // this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'BRL');
+        // console.log(this.formCadastrarProduto.value.valor_lpp);
+        
     }
-
+    
     async sendEditarProduto() {
         const datepipe: DatePipe = new DatePipe("en-US");
         this.formCadastrarProduto.value.data_preco = datepipe.transform(this.formCadastrarProduto.value.data_preco, "YYYY-MM-dd");
-        // this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'');
+        // this.formCadastrarProduto.value.valor_lpp = formatCurrency(this.formCadastrarProduto.value.valor_lpp,this.locale,'BRL');
         // this.formCadastrarProduto.value.preco_compra = formatCurrency(this.formCadastrarProduto.value.preco_compra,this.locale,'');
         // this.formCadastrarProduto.value.perc_ipi = formatCurrency(this.formCadastrarProduto.value.perc_ipi,this.locale,'');
         // this.formCadastrarProduto.value.desconto_compra = formatCurrency(this.formCadastrarProduto.value.desconto_compra,this.locale,'');
