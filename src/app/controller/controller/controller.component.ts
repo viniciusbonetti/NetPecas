@@ -28,11 +28,20 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         pecaFabricante: "/pecaFabricante",
         listaFabricanteCompleta: "/listaFabricanteCompleta",
         checkExclusao: "/checkExclusao",
+        importaProduto: "/importaProduto",
     };
 
     public getToken() {
         let token = localStorage.getItem("token");
         this.headers = { Authorization: "Bearer " + token, "Content-Type": "application/json", Accept: "application/json" };
+        this.setToken = { headers: this.headers };
+
+        return this.setToken;
+    }
+
+    public getTokenArquivo() {
+        let token = localStorage.getItem("token");
+        this.headers = { Authorization: "Bearer " + token, "Content-Type": "multipart/form-data", Accept: "multipart/form-data" };
         this.setToken = { headers: this.headers };
 
         return this.setToken;
@@ -113,6 +122,21 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         //   } catch (error){
         //       this.mostrarErros(error);
         //   }
+    }
+
+    public async postInfoArquivo(path: string, form?: object) {
+        let token = await this.getTokenArquivo();
+        let urlPost = this.baseUrl + path;
+        let resposta = await axios.post(urlPost, form, token).catch(function (response) {
+            return response;
+        });
+        return resposta;
+        // try {
+        //     let sendInfo = await axios.post(urlPost, form, token);
+        //     return sendInfo.data.data;
+        // } catch (error) {
+
+        // }
     }
 
     // public formError() {

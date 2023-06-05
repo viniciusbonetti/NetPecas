@@ -1,0 +1,58 @@
+<c-card>
+    <c-card-header>
+        <h1>Importar Peças</h1>
+    </c-card-header>
+
+    <c-card-body>
+        <c-row>
+            <c-col md="6">
+                <form cForm [formGroup]="formArquivoImportacao" noValidate>
+                    <c-input-group sizing="sm" class="mb-2">
+                        <label cInputGroupText for="arquivo_importacao" class="col-3">
+                            Importar arquivo
+                        </label>
+                        <input  id="arquivo_importacao" type="file" (change)="onFileChange($event)" />
+                        <!-- <c-form-feedback [valid]="this.formArquivoImportacao.controls['arquivo_importacao'].valid"> {{ this.formArquivoImportacao.controls['arquivo_importacao'].errors?.['erro'] }} </c-form-feedback> -->
+                    </c-input-group>
+                </form>
+            </c-col>
+        </c-row>
+        <c-row>
+            <c-col>
+                <p *ngIf="erro" class="text-danger mb-3"> {{ mensagemToast }} </p>
+            </c-col>
+        </c-row>
+        <c-row>
+            <c-col>
+                <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendArquivoImportacao()">teste enviar</button>
+            </c-col>
+        </c-row>
+    </c-card-body>
+</c-card>
+
+<c-toaster [placement]="posicaoToast" class="p-3" position="fixed">
+    <c-toast
+      (timer)="onTimerChange($event)"
+      (visibleChange)="onVisibleChange($event)"
+      [visible]="visivelToast"
+      [delay]="5000"
+      color="{{ corToast }}">
+      <c-toast-header *ngIf="tituloToast">
+        <h5 class="{{ corTextoToast }}, mb-0 w-100" style="text-align: center;">
+            <strong>
+                {{ tituloToast }}
+            </strong>
+        </h5>
+      </c-toast-header>
+      <c-toast-body>
+        <p class="{{ corTextoToast }}, text-center, mb-0" style="font-size: 1rem; text-align: center;">
+             <strong>
+                {{ mensagemToast }}
+            </strong>
+        </p>
+        <!-- <c-progress thin>
+          <c-progress-bar [value]="barraPorcentagemToast"></c-progress-bar>
+        </c-progress> -->
+      </c-toast-body>
+    </c-toast>
+  </c-toaster>

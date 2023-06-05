@@ -46,6 +46,12 @@ const routes: Routes = [
         import('./produtos/produtos.module').then((m) => m.ProdutosModule)
       },
       {
+        path: 'importacoes',
+        title: 'Importacoes - Netpeças',
+        loadChildren: () =>
+        import('./importacoes/importacoes.module').then((m) => m.ImportacoesModule)
+      },
+      {
         path: 'configuracoes',
         title: 'Configurações - Netpeças',
         loadChildren: () =>

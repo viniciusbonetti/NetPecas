@@ -71,6 +71,21 @@ export const navItems: INavData[] = [
     ],
 },
 {
+    name: "Importações",
+    url: "/importacoes",
+    iconComponent: { name: "cil-truck" },
+    children: [
+        {
+            name: "Peças",
+            url: "/importacoes/pecas",
+        },
+        {
+            name: "Estoque",
+            url: "/importacoes/estoque",
+        }
+    ],
+},
+{
     name: "Configurações",
     url: "/configuracoes",
     iconComponent: { name: "cil-settings" },
