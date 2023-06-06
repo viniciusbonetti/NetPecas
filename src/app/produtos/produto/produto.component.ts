@@ -1,8 +1,9 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { IColumn, IItem } from "@coreui/angular-pro/lib/smart-table/smart-table.type";
 import { ControllerComponent } from "src/app/controller/controller/controller.component";
 import { DatePipe } from "@angular/common";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-produto",
@@ -33,7 +34,7 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
     dadosFabricante: any;
     teste: any;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder,private router:Router) {
         super();
     }
 
@@ -42,7 +43,6 @@ export class ProdutoComponent extends ControllerComponent implements OnInit {
         this.getListaFabricanteCompleta();
         this.createForm();
     }
-
     // Geral /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async getListaFabricantes() {
         let resposta = await this.postInfoSemToken(this.paths.listaFabricante);

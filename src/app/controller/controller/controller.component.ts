@@ -60,7 +60,10 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         let urlGet = this.baseUrl + path;
 
         let resposta = await axios.get(urlGet, token).catch(function (response) {
-            
+            if(response.response.status == 401){
+                localStorage.removeItem('token')
+                localStorage.removeItem('logado')
+            }
             return response;
         });
         return resposta;
@@ -70,6 +73,10 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         let token = await this.getToken();
         let urlPost = this.baseUrl + path;
         let resposta = await axios.post(urlPost, form, token).catch(function (response) {
+            if(response.response.status == 401){
+                localStorage.removeItem('token')
+                localStorage.removeItem('logado')
+            }
             return response;
         });
         return resposta;
@@ -92,8 +99,11 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
     public async putInfo(path: string, form: object) {
         let token = await this.getToken();
         let urlPut = this.baseUrl + path;
-
         let resposta = await axios.put(urlPut, form, token).catch(function (response) {
+            if(response.response.status == 401){
+                localStorage.removeItem('token')
+                localStorage.removeItem('logado')
+            }
             return response;
         });
         return resposta;
@@ -111,6 +121,10 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         let token = await this.getToken();
         let urlDelete = this.baseUrl + path;
         let resposta = await axios.delete(urlDelete, token).catch(function (response) {
+            if(response.response.status == 401){
+                localStorage.removeItem('token')
+                localStorage.removeItem('logado')
+            }
             return response;
         });
         return resposta;
@@ -128,6 +142,10 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         let token = await this.getTokenArquivo();
         let urlPost = this.baseUrl + path;
         let resposta = await axios.post(urlPost, form, token).catch(function (response) {
+            if(response.response.status == 401){
+                localStorage.removeItem('token')
+                localStorage.removeItem('logado')
+            }
             return response;
         });
         return resposta;

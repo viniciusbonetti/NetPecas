@@ -6,15 +6,15 @@
     <c-card-body>
         <c-row>
             <c-col md="6">
-                <form cForm [formGroup]="formArquivoImportacao" noValidate>
-                    <c-input-group sizing="sm" class="mb-2">
-                        <label cInputGroupText for="arquivo_importacao" class="col-3">
-                            Importar arquivo
-                        </label>
-                        <input  id="arquivo_importacao" type="file" (change)="onFileChange($event)" />
-                        <!-- <c-form-feedback [valid]="this.formArquivoImportacao.controls['arquivo_importacao'].valid"> {{ this.formArquivoImportacao.controls['arquivo_importacao'].errors?.['erro'] }} </c-form-feedback> -->
-                    </c-input-group>
-                </form>
+                <c-input-group sizing="sm" class="mb-2">
+                    <label cInputGroupText for="arquivo_importacao" class="col-3">
+                        Importar arquivo
+                    </label>
+                    <input  id="arquivo_importacao" type="file" (change)="onFileChange($event)" />
+                    <!-- <c-form-feedback [valid]="this.formArquivoImportacao.controls['arquivo_importacao'].valid"> {{ this.formArquivoImportacao.controls['arquivo_importacao'].errors?.['erro'] }} </c-form-feedback> -->
+                </c-input-group>
+                <!-- <form cForm [formGroup]="formArquivoImportacao" noValidate>
+                </form> -->
             </c-col>
         </c-row>
         <c-row>
