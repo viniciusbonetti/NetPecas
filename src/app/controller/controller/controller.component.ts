@@ -29,6 +29,7 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
         listaFabricanteCompleta: "/listaFabricanteCompleta",
         checkExclusao: "/checkExclusao",
         importaProduto: "/importaProduto",
+        listaImportProduto: "/listaImportProduto",
     };
 
     public getToken() {
@@ -41,7 +42,7 @@ export class ControllerComponent extends SweetAlertsControllerComponent {
 
     public getTokenArquivo() {
         let token = localStorage.getItem("token");
-        this.headers = { Authorization: "Bearer " + token, "Content-Type": "multipart/form-data", Accept: "multipart/form-data" };
+        this.headers = { Authorization: "Bearer " + token, "Content-Type": "multipart/form-data" };
         this.setToken = { headers: this.headers };
 
         return this.setToken;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { IColumn, IItem } from "@coreui/angular-pro/lib/smart-table/smart-table.type";
 import { ControllerComponent } from "src/app/controller/controller/controller.component";
 
 @Component({
@@ -17,13 +18,17 @@ export class PecasComponent extends ControllerComponent implements OnInit {
     erro: any;
 
     // listas
-    listaErros = [];
+    listaLogImportacoes: IItem[];
+    listaResultadosImportacoes: IItem[];
+    listaProblemasImportacoes: IItem[];
 
     // IDs
-    nomeArquivo: string = "";
+    nomeArquivo:any;
     teste: string = "";
     extension: string = "";
-    file: string = "";
+    file:File;
+    idImportacao:string=''
+    parseProblemas:any;
 
     constructor(private formBuilder: FormBuilder) {
         super();
@@ -31,6 +36,7 @@ export class PecasComponent extends ControllerComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
+        this.getListaImportacoes();
     }
 
     // Geral /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,89 +49,145 @@ export class PecasComponent extends ControllerComponent implements OnInit {
         // );
     }
 
-    // Enviar imports ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // public fileImportacao(event:any) {
-    //     let file = event.target.files[0];
-    //     console.log(file);
-
-    //     this.extension = file.type.split("/")[1];
-
-    //     if (file) {
-    //         var reader = new FileReader();
-
-    //         reader.onload = this._handleReaderLoaded.bind(this);
-
-    //         reader.readAsBinaryString(file);
-    //     }
-    // }
-
-    // public _handleReaderLoaded(readerEvt:any) {
-    //     var binaryString = readerEvt.target.result;
-    //     this.file = btoa(binaryString);
-    // }
     onFileChange(event: any) {
-        // console.log(event.target.files[0]);
-
-        if (event.target.files.length > 0) {
-            const objFile = { name: event.target.files[0].name, size: event.target.files[0].size };
-            this.formArquivoImportacao = {arquivo_importacao: objFile};
-            console.log(this.formArquivoImportacao);
-            
-            // this.formArquivoImportacao.append("arquivo_importacao", objFile);
-        }
+        this.file = event.target.files[0];
+        this.nomeArquivo = this.file.name.split('.').pop();
+        this.erro = false;
     }
+
+    fechou() {
+    }
+
+    async getListaImportacoes(){
+        let resposta = await this.postInfo(this.paths.listaImportProduto);
+        this.listaLogImportacoes = resposta.data.data;
+    }
+
+    getListaResultadosImportacoes(item:any){
+        this.idImportacao = item.id;
+        this.listaResultadosImportacoes = Object.keys(item.resultado_importacao).map((key) => ({ key: key, value: item.resultado_importacao[key] }));
+    }
+
+    getListaProblemas(item:any){
+        this.idImportacao = item.id;
+        this.listaProblemasImportacoes = JSON.parse(item.linhas_problemas)        
+    }
+
+    // Enviar Importacao ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async sendArquivoImportacao() {
-        // this.nomeArquivo = this.formArquivoImportacao.controls['arquivo_importacao'].value.name.split('.').pop();
-        // if(this.nomeArquivo === "txt" || this.nomeArquivo === 'xls'){
-            let resposta = await this.postInfo(this.paths.importaProduto, this.formArquivoImportacao);
-            console.log(resposta);
+        if(this.nomeArquivo === "txt" || this.nomeArquivo === 'xls'){
+            let formArquivos = new FormData();
+            formArquivos.append("arquivo_importacao",this.file)
             
-        //     if (resposta.status === 200) {
-        //         this.manualValidation = true;
-        //         this.corToast = "success";
-        //         this.posicaoToast = "bottom-center";
-        //         this.tituloToast = "Sucesso!";
-        //         this.corTextoToast = "text-black";
-        //         this.mensagemToast = "Novo produto cadastrado!";
-        //     } else {
-        //         this.listaErros = resposta.response.data.data;
-        //         this.manualValidation = false;
-        //         this.erro = true
-        //         this.corToast = "danger";
-        //         this.posicaoToast = "bottom-center";
-        //         this.tituloToast = "Falhou!";
-        //         this.corTextoToast = "text-black";
-        //         this.mensagemToast = resposta.response.data.message;
-        //     }
-        // } else if(this.nomeArquivo === ''){
-        //     this.manualValidation = false;
-        //     this.erro = true
-        //     this.corToast = "danger";
-        //     this.posicaoToast = "bottom-center";
-        //     this.tituloToast = "Falhou!";
-        //     this.corTextoToast = "text-black";
-        //     this.mensagemToast = 'O campo Arquivo é obrigatório.'
-        // } else if (this.nomeArquivo !== 'txt' && this.nomeArquivo !== 'xls'){
-        //     this.manualValidation = false;
-        //     this.erro = true
-        //     this.corToast = "danger";
-        //     this.posicaoToast = "bottom-center";
-        //     this.tituloToast = "Falhou!";
-        //     this.corTextoToast = "text-black";
-        //     this.mensagemToast = 'Extensão de arquivo não suportada.'
-        // }
-        // this.toggleToast();
+            let resposta = await this.postInfoArquivo(this.paths.importaProduto, formArquivos);
+            if (resposta.status === 200) {
+                this.manualValidation = true;
+                this.corToast = "success";
+                this.posicaoToast = "bottom-center";
+                this.tituloToast = "Sucesso!";
+                this.corTextoToast = "text-black";
+                this.mensagemToast = "Novo produto cadastrado!";
+            } else {
+                this.manualValidation = false;
+                this.erro = true
+                this.corToast = "danger";
+                this.posicaoToast = "bottom-center";
+                this.tituloToast = "Falhou!";
+                this.corTextoToast = "text-black";
+                this.mensagemToast = resposta.response.data.message;
+            }
+        } else if(this.nomeArquivo === ''){
+            this.manualValidation = false;
+            this.erro = true
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = "text-black";
+            this.mensagemToast = 'O campo Arquivo é obrigatório.'
+        } else if (this.nomeArquivo !== 'txt' && this.nomeArquivo !== 'xls'){
+            this.manualValidation = false;
+            this.erro = true
+            this.corToast = "danger";
+            this.posicaoToast = "bottom-center";
+            this.tituloToast = "Falhou!";
+            this.corTextoToast = "text-black";
+            this.mensagemToast = 'Extensão de arquivo não suportada.'
+        }
+        this.toggleToast();
     }
 
-    // lista Erros ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // setErros() {
-    //     this.listaErros.forEach((item) => {
-    //         switch (item["campo"]) {
-    //             case "arquivo_importacao": {
-    //                 this.formArquivoImportacao.controls["arquivo_importacao"].setErrors({ erro: item["mensagem"], valid: false });
-    //                 break;
-    //             }
-    //         }
-    //     });
-    // }
+    // listas //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    colunasImportacoes: (IColumn | string)[] = [
+        {
+            key: "nome_usuario",
+            label: "Usuário",
+            _style: { width: "20%" },
+            filter: false,
+        },
+        {
+            key: "nome_arquivo",
+            label: "Nome Arquivo",
+            _style: { width: "20%" },
+            filter: false,
+        },
+        {
+            key: "tipo_importacao",
+            label: "Tipo Importação",
+            _style: { width: "10%" },
+            filter: false,
+        },
+        {
+            key: "resultado_importacao",
+            label: "Resultado",
+            _style: { width: "20%" },
+            filter: false,
+        },
+        {
+            key: "linhas_problemas",
+            label: "Problemas",
+            _style: { width: "20%" },
+            filter: false,
+        },
+        {
+            key: "status_importacao",
+            label: "Status",
+            _style: { width: "10%" },
+            filter: false,
+        },
+    ];
+
+    colunasResultadosImportacoes: (IColumn | string)[] = [
+        {
+            key: "key",
+            label: "",
+            _style: { width: "20%" },
+            filter: false,
+        },
+        {
+            key: "value",
+            label: "",
+            _style: { width: "20%" },
+            filter: false,
+        },
+    ];
+    colunasProblemasImportacoes: (IColumn | string)[] = [
+        {
+            key: "linha_dado",
+            label: "Dados",
+            _style: { width: "60%" },
+            filter: false,
+        },
+        {
+            key: "linha_seq",
+            label: "Sequência",
+            _style: { width: "20%" },
+            filter: false,
+        },
+        {
+            key: "linha_size",
+            label: "Tamanho da linha",
+            _style: { width: "20%" },
+            filter: false,
+        },
+    ];
 }

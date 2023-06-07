@@ -95,8 +95,6 @@ export class LoginComponent extends ControllerComponent implements OnInit {
         let resposta = await this.postInfoSemToken(this.paths.login, this.formLogin.value);
         if (resposta.status === 200) {
             this.manualValidation = true;
-            console.log("sucesso");
-            console.log(resposta);
             this.router.navigate(["/dashboard"]);
             this.logado = true;
             localStorage.setItem("logado", this.logado);
@@ -106,8 +104,6 @@ export class LoginComponent extends ControllerComponent implements OnInit {
 
             this.manualValidation = false;
             this.listaErros = resposta.response;
-            console.log(this.listaErros.data);
-            console.log(resposta.response.data.message);
             
             
             if (this.listaErros.status === 401){
@@ -156,17 +152,10 @@ export class LoginComponent extends ControllerComponent implements OnInit {
     async consultarCnpj() {
         let objCnpj = { cnpj: this.inputCnpj };
         let resposta = await this.postInfoSemToken(this.paths.consultaCnpj, objCnpj);
-        // console.log(resposta.data.data);
-        console.log("Razao social");
-        console.log(resposta.data.data.razao_social);
         this.inputRazaoSocial = resposta.data.data.razao_social;
 
-        console.log("Cidade");
-        console.log(resposta.data.data.estabelecimento.cidade.nome);
         this.inputCidade = resposta.data.data.estabelecimento.cidade.nome;
 
-        console.log("Estado");
-        console.log(resposta.data.data.estabelecimento.estado.nome);
         this.inputEstado = resposta.data.data.estabelecimento.estado.nome;
 
         this.consultou = true;
@@ -189,7 +178,6 @@ export class LoginComponent extends ControllerComponent implements OnInit {
 
     async enviarSolicitacao() {
         this.customFormSolicitacao();
-        console.log(this.formSolicitarAcesso);
 
         let resposta = await this.postInfoSemToken(this.paths.solicitacaoAcesso, this.formSolicitarAcesso);
         if (resposta.status === 200) {
@@ -219,6 +207,5 @@ export class LoginComponent extends ControllerComponent implements OnInit {
     async consultarPecas() {
         let resposta = await this.postInfoSemToken(this.paths.consulta, this.formPesquisaRapida.value);
         this.listaPecas = resposta.data.data;
-        console.log(this.listaPecas);
     }
 }

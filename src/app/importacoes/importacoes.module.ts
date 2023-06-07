@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ImportacoesRoutingModule } from './importacoes-routing.module';
 import { PecasComponent } from './pecas/pecas.component';
-import { ButtonModule, CardModule, FormModule, GridModule, SharedModule, SmartTableModule, ToastModule } from '@coreui/angular-pro';
+import { ButtonModule, CardModule, FormModule, GridModule, ModalModule, SharedModule, SmartTableModule, ToastModule } from '@coreui/angular-pro';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
@@ -22,6 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ButtonModule,
     ToastModule,
     SharedModule,
+    ModalModule,
   ]
 })
 export class ImportacoesModule { }

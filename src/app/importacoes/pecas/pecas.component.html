@@ -11,10 +11,7 @@
                         Importar arquivo
                     </label>
                     <input  id="arquivo_importacao" type="file" (change)="onFileChange($event)" />
-                    <!-- <c-form-feedback [valid]="this.formArquivoImportacao.controls['arquivo_importacao'].valid"> {{ this.formArquivoImportacao.controls['arquivo_importacao'].errors?.['erro'] }} </c-form-feedback> -->
                 </c-input-group>
-                <!-- <form cForm [formGroup]="formArquivoImportacao" noValidate>
-                </form> -->
             </c-col>
         </c-row>
         <c-row>
@@ -24,11 +21,123 @@
         </c-row>
         <c-row>
             <c-col>
-                <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendArquivoImportacao()">teste enviar</button>
+                <button cButton class="input-group-text mt-2" color="secondary" type="submit" (click)="sendArquivoImportacao()">Enviar</button>
             </c-col>
         </c-row>
     </c-card-body>
+
+    <c-card-header class="mt-5">
+        <h5>Últimas importações</h5>
+    </c-card-header>
+    <c-card-body>
+        <c-smart-table
+            #smartTable="cSmartTable"
+            activePage="1"
+            cleaner
+            [columnSorter]="true"
+            [columns]="colunasImportacoes"
+            [itemsPerPageSelect]="true"
+            pagination
+            [itemsPerPageLabel]="'Itens por pagina:'"
+            [itemsPerPage]="10"
+            [items]="listaLogImportacoes"
+            [sorterValue]="{ column: 'name', state: 'asc' }"
+            [tableBodyProps]="{align: 'middle'}"
+            header
+            [tableFilter]="true"
+            [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
+            [tableFilterPlaceholder]="''"
+            [tableProps]="{ hover: true, responsive: true }"
+            [noItemsLabel]="'Nenhuma peça encontrada'"
+            class="text-center"
+        >
+        <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+            <td>
+                <ng-container [ngSwitch]="columnName">
+                    <ng-container *ngSwitchCase="'resultado_importacao'">
+                        <button [cModalToggle]="modalResultadoImportacao.id" (click)="getListaResultadosImportacoes(item)"style="background: none; border: none;"><i class="fa-solid fa-square-poll-horizontal text-secondary" style="font-size: 1.5rem;"></i></button>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'linhas_problemas'">
+                        <button [cModalToggle]="modalProblemasImportacao.id" (click)="getListaProblemas(item)"style="background: none; border: none;"><i class="fa-solid fa-circle-exclamation text-secondary" style="font-size: 1.5rem;"></i></button>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        {{tdContent}}
+                    </ng-container>
+                </ng-container>
+            </td>
+        </ng-template>
+    </c-smart-table>
+    </c-card-body>
 </c-card>
+
+<c-modal #modalResultadoImportacao id="modalResultadoImportacao" alignment="center" (visibleChange)="fechou()">
+    <c-modal-header>
+        <h5 cModalTitle>Resultado da importação: {{ idImportacao }} </h5>
+        <button (click)="fechou()" [cModalToggle]="modalResultadoImportacao.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+        <c-smart-table
+            #smartTable="cSmartTable"
+            activePage="1"
+            [columnSorter]="true"
+            [columns]="colunasResultadosImportacoes"
+            [items]="listaResultadosImportacoes"
+            [sorterValue]="{ column: 'name', state: 'asc' }"
+            [tableBodyProps]="{align: 'middle'}"
+            header
+            [tableProps]="{ hover: true, responsive: true }"
+            [noItemsLabel]="'Nenhum resultado encontrado'"
+            class="text-center"
+        >
+        <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+            <td>
+                <ng-container [ngSwitch]="columnName">
+                    <ng-container *ngSwitchCase="'key'">
+                        <p *ngIf="item.key == 'total_novos'" class="m-0">Total Novos</p>
+                        <p *ngIf="item.key == 'total_linhas'" class="m-0">Total Linhas</p>
+                        <p *ngIf="item.key == 'total_problemas'" class="m-0">Total Problemas</p>
+                        <p *ngIf="item.key == 'total_atualizados'" class="m-0">Total Atualizados</p>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                        {{tdContent}}
+                    </ng-container>
+                </ng-container>
+            </td>
+        </ng-template>
+        </c-smart-table>
+    </c-modal-body>
+</c-modal>
+
+<c-modal #modalProblemasImportacao id="modalProblemasImportacao" alignment="center" (visibleChange)="fechou()" size="lg">
+    <c-modal-header>
+        <h5 cModalTitle>Problemas na importação: {{ idImportacao }} </h5>
+        <button (click)="fechou()" [cModalToggle]="modalProblemasImportacao.id" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+        <c-smart-table
+            #smartTable="cSmartTable"
+            activePage="1"
+            cleaner
+            [columnSorter]="true"
+            [columns]="colunasProblemasImportacoes"
+            [itemsPerPageSelect]="true"
+            pagination
+            [itemsPerPageLabel]="'Itens por pagina:'"
+            [itemsPerPage]="5"
+            [items]="listaProblemasImportacoes"
+            [sorterValue]="{ column: 'name', state: 'asc' }"
+            [tableBodyProps]="{align: 'middle'}"
+            header
+            [tableFilter]="true"
+            [tableFilterLabel]="'&nbsp;&nbsp;Filtrar:'"
+            [tableFilterPlaceholder]="''"
+            [tableProps]="{ hover: true, responsive: true }"
+            [noItemsLabel]="'Nenhum problema encontrado'"
+            class="text-center"
+        >
+        </c-smart-table>
+    </c-modal-body>
+</c-modal>
 
 <c-toaster [placement]="posicaoToast" class="p-3" position="fixed">
     <c-toast
